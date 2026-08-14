@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Hunar - Pitch Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --off-white: #F4F4F0;
+            --black: #0A0A0A;
+            --dark-glass: rgba(255, 255, 255, 0.04);
+            --light-glass: rgba(255, 255, 255, 0.7);
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
+        /* Presentation Container */
+        .presentation-container {
+            width: 100vw;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+            position: relative;
+            height: 100vh;
+        }
+        .presentation-container::-webkit-scrollbar { display: none; }
+
+        /* Slide Base */
+        .slide {
+            min-height: 100vh; /* Allows growth on small screens */
+            width: 100vw;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 4rem 4rem 4rem;
+            overflow: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            font-weight: 700;
+        }
+        h1 { font-size: clamp(3rem, 8vw, 7rem); }
+        h2 { font-size: clamp(1.8rem, 3.5vw, 3rem); margin-bottom: 1.5rem; }
+        h3 { font-size: clamp(1.1rem, 1.8vw, 1.5rem); margin-bottom: 0.8rem; font-weight: 600; }
+        p { font-size: clamp(0.9rem, 1.1vw, 1.05rem); line-height: 1.6; max-width: 650px; margin-bottom: 1rem; font-weight: 300; }
+        
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .bg-black { background-color: var(--black); color: var(--white); }
+        .bg-white { background-color: var(--white); color: var(--black); }
+        
+        /* Soft Morning Light & Sunbeams */
+        .slide-image-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+            filter: sepia(10%) contrast(110%) brightness(80%);
+        }
+        
+        .sunbeam {
+            position: absolute;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            transform: skewX(-15deg);
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        /* Glassmorphism Utility */
+        .glass {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .bg-black .glass {
+            background: var(--dark-glass);
+            border: 1px solid var(--border-dark);
+        }
+        .bg-white .glass {
+            background: var(--light-glass);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* Header Layout */
+        .slide-header {
+            position: absolute;
+            top: 1.5rem;
+            left: 0;
+            width: 100%;
+            padding: 0 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand-left {
+            display: flex;
+            flex-direction: column;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.2;
+        }
+        .brand-left span {
+            font-size: 0.65rem;
+            font-weight: 400;
+            opacity: 0.7;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .brand-right img {
+            height: 50px;
+            width: auto;
+        }
+        .bg-black .brand-right img { filter: brightness(0) invert(1); }
+
+        /* Standard Split Layout */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .content-center {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Cover Slide */
+        .slide-cover h1 {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            background: linear-gradient(180deg, #FFFFFF 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 80px rgba(255, 255, 255, 0.2);
+        }
+        .slide-cover .subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: var(--white);
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+        .slide-cover .flagship-tag {
+            margin-top: 2rem;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 500;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            z-index: 2;
+            max-width: 1200px;
+        }
+        .feature-card { text-align: left; }
+        .feature-card h3 { margin-bottom: 0.5rem; }
+        .feature-card p { font-size: 0.95rem; margin: 0; }
+
+        /* Media Galleries */
+        .slider-container {
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+            z-index: 2;
+        }
+        .slider-container::-webkit-scrollbar { height: 4px; }
+        .bg-white .slider-container::-webkit-scrollbar-thumb { background: var(--black); }
+        .bg-black .slider-container::-webkit-scrollbar-thumb { background: var(--white); }
+
+        .slider-card {
+            min-width: 250px;
+            height: 320px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            scroll-snap-align: start;
+            cursor: pointer;
+            border: 1px solid var(--border-dark);
+        }
+        .slider-card img { width: 100%; height: 100%; object-fit: cover; }
+        .slider-card .info {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+        }
+        .slider-card .info h4 { font-size: 1rem; font-weight: 600; }
+
+        /* =========================================
+           SECTION 5: MIXED EDITORIAL BENTO GRID 
+           ========================================= */
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: minmax(120px, auto);
+            gap: 1.5rem;
+            width: 100%;
+            height: 75vh;
+            z-index: 2;
+        }
+        .ed-item {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-light);
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease;
+        }
+        .ed-item:hover { transform: scale(1.02); }
+        
+        .ed-text {
+            grid-column: span 4;
+            grid-row: span 2;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        .ed-img-1 { grid-column: span 2; grid-row: span 2; }
+        .ed-img-2 { grid-column: span 3; }
+        .ed-img-3 { grid-column: span 3; }
+
+        /* UI Elements */
+        .page-indicator {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2rem;
+            font-size: 0.8rem;
+            z-index: 100;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-dark);
+            font-weight: 600;
+            mix-blend-mode: difference;
+            color: white;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        .text-list {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-top: 1rem;
+            max-width: 100%;
+        }
+
+        /* =========================================
+           RESPONSIVE STYLES 
+           ========================================= */
+        @media (max-width: 900px) {
+            .slide {
+                padding: 5rem 1.5rem 2rem 1.5rem;
+                justify-content: flex-start;
+                padding-top: 5rem;
+            }
+
+            .slide-header {
+                padding: 0 1.5rem;
+                top: 1rem;
+            }
+            .brand-left { font-size: 0.9rem; }
+            .brand-right img { height: 35px; }
+
+            .split-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                height: auto;
+                margin-top: 1rem;
+            }
+
+            .split-layout > div:first-child {
+                order: 2; 
+            }
+            .split-layout > div:last-child {
+                order: 1;
+                min-height: 250px !important;
+            }
+            .slide-image-bg {
+                position: relative;
+                height: 250px;
+                border-radius: 16px;
+            }
+
+            .content-center {
+                height: auto;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Editorial Grid Mobile Fixes */
+            .editorial-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: auto;
+                height: auto;
+                gap: 1rem;
+            }
+            .ed-text, .ed-img-1, .ed-img-2, .ed-img-3 {
+                grid-column: span 1;
+                grid-row: auto;
+                min-height: 200px;
+            }
+            .ed-text {
+                min-height: auto;
+                padding: 1.5rem;
+            }
+
+            .glass {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+            p { font-size: 0.9rem; margin-bottom: 0.8rem; }
+            .label { margin-bottom: 1rem; letter-spacing: 0.2em; }
+            .slide-cover h1 { font-size: 3.5rem; }
+            .slide-cover .subtitle { font-size: 1rem; }
+            .slide-cover .flagship-tag { font-size: 0.65rem; padding: 0.5rem 1rem; }
+            .page-indicator { bottom: 1rem; right: 1rem; padding: 0.4rem 0.8rem; font-size: 0.7rem; }
+            .slider-card { min-width: 200px; height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+    <!-- COVER PAGE -->
+    <section class="slide slide-cover bg-black">
+        <div class="slide-image-bg" style="background-image: url('https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070&auto=format&fit=crop');"></div>
+        <div class="sunbeam" style="width: 300px; height: 200vh; top: -50vh; left: 20%; opacity: 0.4;"></div>
+        <div class="sunbeam" style="width: 150px; height: 200vh; top: -50vh; left: 60%; opacity: 0.3;"></div>
+        
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>Empowering Women</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="content-center">
+            <h1>Hunar</h1>
+            <div class="subtitle">Empowering women through creativity</div>
+            <div class="flagship-tag">A social enterprise initiative of Anubhav NGO</div>
+        </div>
+    </section>
+
+    <!-- PAGE 1: ABOUT PROJECT HUNAR -->
+    <section class="slide bg-white">
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>About Us</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="split-layout">
+            <div class="reveal glass">
+                <span class="label" style="color: #555;">01 — About Project Hunar</span>
+                <h2>Some of the most beautiful things in the world are made by hands that were once told they had nothing to offer.</h2>
+                <p>Project Hunar was born from a simple belief that every woman, regardless of where she comes from, carries within her the capacity to create something extraordinary. What she needs is the space, the training, and someone to believe in her before she believes in herself.</p>
+                <p>Since its inception under Anubhav Educational and Social Welfare Society, Project Hunar has trained women from underserved communities across Delhi in tailoring, stitching, garment making, crochet, and the ancient art of Madhubani painting. These are not just skills. They are livelihoods. And behind every product in this catalogue is a woman who built hers from scratch.</p>
+                <p>Every stitch is intentional. Every piece is made with care. And every order placed with Project Hunar goes directly toward sustaining the livelihood of a woman who earned it.</p>
+            </div>
+            <div style="position: relative; height: 100%; min-height: 400px;">
+                <div class="slide-image-bg" style="background-image: url('https://images.unsplash.com/photo-1594635229898-1e6f7f5b2b2b?q=80&w=1000&auto=format&fit=crop'); opacity: 0.9;"></div>
+                <div class="sunbeam" style="width: 200px; height: 150vh; top: -20vh; right: 10%; opacity: 0.5;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 2: THE HANDS BEHIND THE CRAFT -->
+    <section class="slide bg-black">
+        <div class="slide-header">
+            <div class="brand-left" style="color: white;">PROJECT HUNAR<span>The Craft</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="split-layout">
+            <div style="position: relative; height: 100%; min-height: 400px;">
+                <div class="slide-image-bg" style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1000&auto=format&fit=crop'); opacity: 0.7;"></div>
+                <div class="sunbeam" style="width: 200px; height: 150vh; top: -20vh; left: 10%; opacity: 0.3;"></div>
+            </div>
+            <div class="reveal glass">
+                <span class="label" style="color: #aaa;">02 — The Hands Behind The Craft</span>
+                <h2 style="color: white;">Every workshop needs a soul. Ours has one.</h2>
+                <p style="color: #ddd;">Project Hunar's production is guided by our in-house masterji, a seasoned craft professional whose expertise spans decades of tailoring, garment construction, and quality finishing. He does not just supervise. He mentors, encourages, and pushes every woman in the workshop to do her best work.</p>
+                <p style="color: #ddd;">Under his guidance, what begins as a woman's first uncertain stitch becomes a confident, finished product that meets professional standards. He is the reason our quality is consistent. And he is the reason our women grow, not just as artisans, but as professionals.</p>
+                <p style="color: #ddd;">When you order from Project Hunar, you are not just getting a well-made product. You are getting the result of mentorship, patience, and craft passed down with intention.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 3: WHY PARTNER WITH US -->
+    <section class="slide bg-white">
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>Partnerships</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="content-center reveal" style="padding-top: 2rem;">
+            <span class="label" style="color: #555;">03 — Why Partner With Us</span>
+            <h2 style="max-width: 1000px;">We know there are many places you can source products from. Here is why Project Hunar is worth a closer look.</h2>
+            
+            <div class="features-grid" style="margin-top: 1rem;">
+                <div class="glass feature-card">
+                    <h3>We work with small businesses too!</h3>
+                    <p>Most production houses have minimum order quantities that put them out of reach for smaller brands and organisations. We accept orders starting from as few as 25 pieces. If you are a small business, a startup, or an organisation placing your first gifting order, we want to work with you. You should not have to order more than you need just to get something made well.</p>
+                </div>
+                <div class="glass feature-card">
+                    <h3>Every order is customisable!</h3>
+                    <p>Whether you need a specific size, colour, fabric, print, or branding element, we work with you to get it right. Our team is equipped for end-to-end customisation, from concept to finished product.</p>
+                </div>
+                <div class="glass feature-card">
+                    <h3>You are buying more than a product!</h3>
+                    <p>When you place an order with Project Hunar, you are directly contributing to a woman's livelihood. There are no middlemen. The work is done by the women we train, supervised by our masterji, and delivered with the same care they put into every piece.</p>
+                </div>
+                <div class="glass feature-card">
+                    <h3>80G tax exempt!</h3>
+                    <p>For organisations looking to align their procurement with their CSR goals, partnering with us also offers tax benefits. Every rupee spent here is documented, transparent, and accountable.</p>
+                </div>
+            </div>
+            <p class="text-list" style="max-width: 1000px; text-align: center; margin-top: 1.5rem;">
+                <strong>Our production capabilities include:</strong> Sewing and stitching services. Uniform production. Corporate gifting products. Tote bags and textile accessories. Crochet and handmade products. Madhubani art on apparel and home decor. Customised production orders.<br>
+                <em>Pricing depends on product and quantity. Write to us for a quote.</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- PAGE 4: MADHUBANI COLLECTION -->
+    <section class="slide bg-black">
+        <div class="slide-header">
+            <div class="brand-left" style="color: white;">PROJECT HUNAR<span>Our Craft</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="split-layout">
+            <div class="reveal glass">
+                <span class="label" style="color: #aaa;">04 — Madhubani Collection</span>
+                <h2 style="color: white; font-size: 2.2rem;">There is an art form that has survived centuries in the villages of Bihar's Mithila region.</h2>
+                <p style="color: #ddd;">Passed down from mother to daughter, painted on walls, floors, and fabric, Madhubani art carries within it the stories, rituals, and beliefs of generations of women who had no other canvas. At Project Hunar, we carry that tradition forward.</p>
+                <p style="color: #ddd;">Our Madhubani collection is developed under the guidance of Anuradha Jha, a disciple of Padma Shri awardee Sita Devi, one of the most celebrated exponents of Mithila art. Through her mentorship, our women artisans learn not just how to paint, but what the motifs mean, where they come from, and why they matter.</p>
+                <p style="color: #ddd;">Every piece in this collection is hand-painted. The fish, the lotus, the sun, the peacock, the bride and groom — each motif carries a story that is thousands of years old, now living on a saree, a shirt, a pair of jeans, a lamp, a diary, a mug. When you wear or display a piece from this collection, you are carrying a piece of that story with you.</p>
+                <div class="text-list" style="color: #aaa;">
+                    <strong style="color: white;">The Madhubani collection includes:</strong> Sarees. Shirts. Jeans. Shoes. Silk fabric. Cotton fabric. Linen fabric. Jute fabric. Table lamps. Wall boards. Cushions. Bedsheets. Mobile covers. Diaries. Coffee mugs. Photo frames. Pen stands.<br>
+                    <em>All pieces are available for custom orders. Bulk orders welcome from 25 pieces onwards.</em>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem; height: 100%;">
+                <div class="slider-container" id="madhubani-slider" style="flex: 1;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 5: QUILTED AND HANDMADE COLLECTION (MIXED EDITORIAL LAYOUT) -->
+    <section class="slide bg-white">
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>Our Craft</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="editorial-grid reveal">
+            <!-- Text Block -->
+            <div class="glass ed-text">
+                <span class="label" style="color: #555;">05 — Quilted And Handmade Collection</span>
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Not everything that is handmade announces itself loudly. Some things are quietly, consistently beautiful.</h2>
+                <p style="font-size: 0.95rem;">Our quilted and handmade collection is made by women who have learned that good work takes patience. Each pouch is stitched with care. Each tote is built to last. Each crochet flower is looped by hand, one stitch at a time, until something that started as yarn becomes something you want to keep on your desk.</p>
+                <p style="font-size: 0.95rem;">This collection is particularly well suited for corporate gifting, personal occasions, festive hampers, and retail. The pieces are functional, beautiful, and carry a story that makes them worth giving.</p>
+                <div class="text-list" style="font-size: 0.85rem; margin-top: 1rem;">
+                    <strong>The quilted and handmade collection includes:</strong> Quilted cosmetic pouches in multiple prints and colours. Quilted tote bags, bolster cushions, table mats, cushion covers, crochet flowers in pots and puffer jackets.<br>
+                    <em>Custom prints, colours, and sizes available on request. Minimum order: 25 pieces.</em>
+                </div>
+            </div>
+            
+            <!-- Mixed Images -->
+            <div class="ed-item ed-img-1" style="background-image: url('https://source.unsplash.com/800x800/?quilt,handmade,texture');"></div>
+            <div class="ed-item ed-img-2" style="background-image: url('https://source.unsplash.com/800x400/?yarn,crochet');"></div>
+            <div class="ed-item ed-img-3" style="background-image: url('https://source.unsplash.com/800x400/?tote-bag,cotton');"></div>
+        </div>
+    </section>
+
+    <!-- PAGE 6: FOR SMALL BUSINESSES AND STARTUPS -->
+    <section class="slide bg-black">
+        <div class="slide-header">
+            <div class="brand-left" style="color: white;">PROJECT HUNAR<span>Partnerships</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="split-layout">
+            <div style="position: relative; height: 100%; min-height: 400px;">
+                <div class="slide-image-bg" style="background-image: url('https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1000&auto=format&fit=crop'); opacity: 0.6;"></div>
+                <div class="sunbeam" style="width: 200px; height: 150vh; top: -20vh; left: 10%; opacity: 0.3;"></div>
+            </div>
+            <div class="reveal glass">
+                <span class="label" style="color: #aaa;">06 — For Small Businesses And Startups</span>
+                <h2 style="color: white;">If you have been looking for a production partner who will take your order seriously even if it is small, you have found one.</h2>
+                <p style="color: #ddd;">We understand what it feels like to be a small brand trying to do things right. You want quality. You want fair pricing. You want a partner who communicates well and delivers on time. And you want to know that what you are sourcing means something beyond the transaction. Project Hunar can be that partner.</p>
+                <p style="color: #ddd;">We work with small businesses, independent designers, D2C brands, and first-time buyers. Our minimum order quantity of 25 pieces means you can test a product, place a small gifting order, or launch a limited collection without committing to more than you are ready for.</p>
+                <p style="color: #ddd;">And every time you order from us, a woman in Delhi's underserved communities earns a dignified livelihood from the work she has learned to do well. That is a partnership worth having. Write to us to start the conversation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 7: CORPORATE GIFTING -->
+    <section class="slide bg-white">
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>Corporate</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="split-layout">
+            <div class="reveal glass">
+                <span class="label" style="color: #555;">07 — Corporate Gifting</span>
+                <h2>The best corporate gifts are the ones that get kept.</h2>
+                <p>A handcrafted quilted pouch. A Madhubani-painted diary. A crochet flower that sits on someone's desk long after the occasion has passed. These are not things people throw away. They are things people remember, and more importantly, they remember where they came from.</p>
+                <p>Project Hunar's corporate gifting range is designed for organisations that want their gifts to carry meaning. Each piece is handcrafted by trained women artisans, customisable with your branding, and available in bulk from 25 pieces onwards.</p>
+                <p>Whether you are planning employee appreciation gifts, client hampers, conference giveaways, or festive season orders, we can help you put together something that reflects your organisation's values as much as ours.</p>
+                <p style="font-weight: 600; margin-top: 1.5rem;">CSR budgets welcome. 80G tax exemption available. Get in touch to discuss your requirements.</p>
+            </div>
+            <div style="position: relative; height: 100%; min-height: 400px;">
+                <div class="slide-image-bg" style="background-image: url('https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop'); opacity: 0.9;"></div>
+                <div class="sunbeam" style="width: 250px; height: 150vh; top: -20vh; right: 5%; opacity: 0.4;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 8: CUSTOM ORDERS -->
+    <section class="slide bg-black">
+        <div class="slide-header">
+            <div class="brand-left" style="color: white;">PROJECT HUNAR<span>Customisation</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="content-center reveal">
+            <div class="glass" style="max-width: 900px; text-align: center;">
+                <span class="label" style="color: #aaa;">08 — Custom Orders</span>
+                <h2 style="color: white;">Have something specific in mind? We want to hear it.</h2>
+                <p style="color: #ddd; margin: 1rem auto;">Project Hunar accepts fully customised production orders. Tell us the product, the quantity, the size, the fabric, the print, the colour, and any branding requirements, and our team will work with you to bring it to life.</p>
+                <p style="color: #ddd; margin: 1rem auto;">Our masterji and production team have the expertise to handle a wide range of garment and textile requirements, from uniforms and ethnic wear to lifestyle accessories and home decor. If it can be stitched, quilted, crocheted, or painted, we can make it.</p>
+                <p style="color: #ddd; margin: 1rem auto;">Custom orders start from 25 pieces. Pricing depends on product specifications and quantity. Write to us with your brief and we will take it from there.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="slide bg-white">
+        <div class="slide-header">
+            <div class="brand-left">PROJECT HUNAR<span>Contact Us</span></div>
+            <div class="brand-right"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></div>
+        </div>
+
+        <div class="content-center reveal">
+            <div class="glass" style="max-width: 800px; text-align: center; padding: 3rem;">
+                <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 2rem;">Contact Us</h1>
+                <p style="font-size: 1.1rem; font-weight: 500; color: var(--black);">Project Hunar - A social enterprise of Anubhav NGO</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; text-align: left;" class="contact-grid">
+                    <div>
+                        <h3 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Coordinators</h3>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">Sudhir William / Minakshi Raj</p>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">9810388330 / +91 79827 99527</p>
+                        <p style="font-size: 0.85rem; color: #666;">Office hours: 10am to 5pm</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Reach Us</h3>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">Contact@anubhavngo.in</p>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">www.anubhavngo.in</p>
+                        <p style="font-size: 0.85rem; color: #666;">A-128/1, second floor, Mohammad Pur Near Bhikaji Cama Place New Delhi 66</p>
+                        <p style="font-size: 0.95rem; font-weight: 600; margin-top: 0.5rem;">Instagram: @anubhav.ngo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div class="page-indicator">
+    <span id="current-page">01</span> / 10
+</div>
+
+<style>
+    /* Specific fix for contact grid on mobile */
+    @media (max-width: 600px) {
+        .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+    }
+</style>
+
+<script>
+    // Madhubani Drive Image IDs
+    const madhubaniIds = [
+        "105L5tFyz8LgWJjiFu4SgCtRL4mJMAjNO", "10ZtOtditFVhThFyrXQDJi1GTFqEXINe0",
+        "11RWLBOZ2elAGNebi-hVGIKUEOz9OyH8B", "14Od-ATTcH9vMB3s6sWB5HuLUfiOLlRIC",
+        "15DcAfjyQ9wKgwNS8j3Ke1YlVKdAcWW3p", "15Q57qrCpOgE5uxQsZm8vEGQtbsFluJCF",
+        "161XtiI8zfVOQEcDaQgZFrAuFpas6sGyd", "17WgXMbud8gOwm9DWmQz9gKxsTu7AoA69",
+        "1ArYY2vC4ZZ2qNTwHsV8o8_MdaXj0WPRD", "1Bua0f10r89pUL1XRvp1t_bPif6JzkbYK",
+        "1IpMJ3M36IoXfTR37mEZz5sR1nYYjnbd8", "1LghLTD-ArzBFUO73As2hxW7C2nt9gHVp",
+        "1Lsx93z4b3MQHTL90OwMWeAfhG2k9wx82", "1MksAeT2o3z0SRKXWRt5ykJmuV8lxtYWO",
+        "1Ob5UtDPm5AjcALAz_sX2oWMWOc31t40w", "1SXl2qJWOfKtUjjF8niRcmDra3E3ChCSX",
+        "1XkE_d6b1Otit4eThsMLLoiUCobznntNw", "1b572fbW9sEYCeJor-gVkhPjUOHShkf45",
+        "1dVn8BFcehnvQb2X58IZiNrD2KLWDfwF4", "1fgbeFikBnR22-XLmvnLgQtDQyKsWX57b",
+        "1h7hXq_zsdyUtN72xtpC-Rv1Y3iFOrnyk", "1i_Q-PYJPVwaYfjl9Jch4cBEfXy84dkye",
+        "1jmVKEQyG5f42yqtsuN_CzDkuw5cgNrmM", "1lSI4hGTGIfSIY9XZTOb6YwCCdBV1eVbT",
+        "1oigd63gFT29SfOXaDlAo8EJo-Miwnd8Y", "1pFvG8q57neUti-ynqrHvjzac8mzem_gT",
+        "1wHU9WNqTURq7S9BsInWGaR5XPB9QFORd", "1xOmVu4DcLdeL-nxhbiCFVaoYmScUH-Xz",
+        "1z7QWbF4WWMG-dTELJTw-_JzfQe5UvQyC"
+    ];
+
+    const getImgUrl = (id, size = 800) => `https://drive.google.com/thumbnail?id=${id}&sz=w${size}`;
+    const madhubaniTitles = [
+        "Sarees", "Shirts", "Jeans", "Shoes", "Silk fabric", "Cotton fabric", 
+        "Linen fabric", "Jute fabric", "Table lamps", "Wall boards", 
+        "Cushions", "Bedsheets", "Mobile covers", "Diaries", "Coffee mugs", 
+        "Photo frames", "Pen stands", "Custom Art 1", "Custom Art 2", "Custom Art 3",
+        "Apparel", "Home Decor 1", "Home Decor 2", "Accessories 1", "Accessories 2", 
+        "Textile", "Pottery", "Festive", "Gallery 29"
+    ];
+    
+    const madhubaniSlider = document.getElementById('madhubani-slider');
+    madhubaniIds.forEach((id, index) => {
+        madhubaniSlider.innerHTML += `
+            <div class="slider-card">
+                <img src="${getImgUrl(id, 600)}" alt="${madhubaniTitles[index]}" onerror="this.src='https://source.unsplash.com/400x300/?madhubani,art,${index}'">
+                <div class="info">
+                    <h4>${madhubaniTitles[index]}</h4>
+                </div>
+            </div>
+        `;
+    });
+
+    // Reveal Animations
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    revealElements.forEach(el => observer.observe(el));
+
+    // Pagination Logic
+    const container = document.querySelector('.presentation-container');
+    const indicator = document.getElementById('current-page');
+    const slides = document.querySelectorAll('.slide');
+
+    container.addEventListener('scroll', () => {
+        let current = '';
+        const scrollTop = container.scrollTop;
+        const viewportHeight = container.clientHeight;
+        
+        slides.forEach((slide, index) => {
+            if (scrollTop >= index * viewportHeight - 100 && scrollTop < (index + 1) * viewportHeight) {
+                current = index + 1;
+            }
+        });
+        
+        if (current) {
+            indicator.textContent = String(current).padStart(2, '0');
+        }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+            e.preventDefault();
+            container.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            container.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+        }
+    });
+
+</script>
+
+</body>
+</html>
