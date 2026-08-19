@@ -1,0 +1,1473 @@
+<style>
+    /* =====================================================
+   PROGRAMME INTRO
+===================================================== */
+
+    .job-programme-intro {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 40px auto 25px;
+        padding: 24px;
+        background: #f8f9fb;
+        border: 1px solid #dcdcdc;
+        border-radius: 6px;
+        text-align: left;
+    }
+
+    .job-programme-intro h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 15px;
+        line-height: 1.4;
+    }
+
+    .job-programme-intro h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin: 22px 0 10px;
+    }
+
+    .job-programme-intro p {
+        font-size: 14px;
+        line-height: 1.7;
+        margin: 0 0 12px;
+        color: #444;
+    }
+
+    .programme-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .programme-details span {
+        display: inline-block;
+        background: #f3f6fb;
+        border: 1px solid #dcdcdc;
+        color: #444;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .programme-invite {
+        margin-top: 18px !important;
+        margin-bottom: 0 !important;
+        font-weight: 600;
+    }
+
+
+    /* =====================================================
+   JOB GRID
+===================================================== */
+
+    .job-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin: 40px auto;
+    }
+
+
+    /* =====================================================
+   JOB CARD
+===================================================== */
+
+    .job-card {
+        background: #ffffff;
+        border: 1px solid #dcdcdc;
+        padding: 22px;
+        border-radius: 6px;
+        text-align: left;
+        transition: 0.2s ease;
+    }
+
+    .job-card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .job-card-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .job-card-subtitle {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .job-detail-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+
+    .detail-button {
+        background: #f3f6fb;
+        color: #0162ff;
+        border: 1px solid #dcdcdc;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        line-height: 1.4;
+    }
+
+    .card-buttons {
+        background: #0162ff;
+        color: #ffffff;
+        padding: 8px 14px;
+        font-size: 13px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .card-buttons:hover {
+        background: #014fcc;
+    }
+
+
+    /* =====================================================
+   MODAL
+===================================================== */
+
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 30px;
+        border: 1px solid #dcdcdc;
+        border-radius: 6px;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+        margin-bottom: 5px;
+        line-height: 1.4;
+        padding-right: 30px;
+    }
+
+    .modal-deadline {
+        font-weight: 600;
+        color: #c0392b;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .modal-content h3 {
+        margin-top: 22px;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+
+    .modal-content p,
+    .modal-content li {
+        font-size: 14px;
+        line-height: 1.7;
+        margin-bottom: 6px;
+    }
+
+    .modal-content ul,
+    .modal-content ol {
+        padding-left: 20px;
+    }
+
+    .modal-content strong {
+        font-weight: 600;
+    }
+
+    .close {
+        float: right;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        color: #333;
+        margin-left: 15px;
+    }
+
+    .close:hover {
+        color: #0162ff;
+    }
+
+
+    /* =====================================================
+   MOBILE
+===================================================== */
+
+    @media (max-width: 768px) {
+
+        .job-programme-intro {
+            padding: 18px;
+            margin: 30px auto 20px;
+        }
+
+        .job-programme-intro h2 {
+            font-size: 19px;
+        }
+
+        .job-programme-intro h3 {
+            font-size: 15px;
+        }
+
+        .job-programme-intro p {
+            font-size: 13px;
+        }
+
+        .programme-details {
+            flex-direction: column;
+        }
+
+        .programme-details span {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .job-cards {
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin: 30px auto;
+        }
+
+        .job-card {
+            padding: 18px;
+        }
+
+        .job-card-title {
+            font-size: 17px;
+        }
+
+        .job-card-subtitle {
+            font-size: 13px;
+        }
+
+        .modal {
+            padding: 12px;
+        }
+
+        .modal-content {
+            padding: 20px;
+            margin: 15px auto;
+        }
+
+        .modal-content h2 {
+            font-size: 18px;
+        }
+
+        .modal-content h3 {
+            font-size: 14px;
+        }
+
+        .modal-content p,
+        .modal-content li {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+    }
+
+
+    /* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+    @media (max-width: 480px) {
+
+        .job-card {
+            padding: 16px;
+        }
+
+        .job-detail-buttons {
+            gap: 6px;
+        }
+
+        .detail-button {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        .card-buttons {
+            font-size: 12px;
+            padding: 7px 12px;
+        }
+
+        .modal-content {
+            padding: 16px;
+        }
+
+    }
+</style>
+
+
+
+
+<!-- =====================================================
+     JOB CARDS
+===================================================== -->
+
+<div class="job-cards"></div>
+
+
+<!-- =====================================================
+     JOB MODAL
+===================================================== -->
+
+<div id="jobModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeModal()">×</span>
+
+        <h2 id="modalTitle"></h2>
+
+        <div class="modal-deadline">
+            Application Deadline: 28th August 2026 (23:59 Hrs)
+        </div>
+
+        <div id="modalBody"></div>
+
+        <br>
+
+        <a id="modalApply" target="_blank" rel="noopener noreferrer">
+
+            <button type="button" class="card-buttons">
+                Apply Now
+            </button>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       JOB DATA
+    ===================================================== */
+
+    const jobData = [
+
+
+
+        /* =====================================================
+           3. PROGRAMME COORDINATOR – ENVIRONMENTAL EDUCATION
+        ===================================================== */
+
+        {
+            title: "Programme Coordinator (Delhi) (1 Position)",
+
+            shortDesc:
+                "Provide overall programme coordination, strategic oversight, and technical support for the school sustainability and stewardship programme.",
+
+            location: "Delhi",
+            duration: "Full-time",
+            experience: "8–12+ years",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+
+        <div class="job-programme-intro">
+
+    <h2>
+        Call for Applications: ‘Nurturing Responsible Stewards for a Sustainable Future’ Programme
+    </h2>
+
+    <p>
+       We are implementing a school-based programme to nurture environmentally responsible and socially responsive young citizens through education, practical learning, and school-community engagement.
+    </p>
+
+    <p>
+        The programme will operate across selected schools in Prayagraj and
+        Kaushambi (Uttar Pradesh) reaching students from Classes 6 – 12.
+        The focus areas include climate change, environmental education,
+        water conservation, WASH, health and hygiene, sustainable lifestyles,
+        student leadership, digital learning, and school-level sustainability
+        initiatives.
+    </p>
+
+    <p class="programme-invite">
+        We invite applications from qualified, passionate professionals
+        for the following position
+    </p>
+
+</div>
+
+            <h3>About the Role</h3>
+
+            <p>
+                The <strong>Programme Coordinator</strong> will provide
+                overall programme coordination, strategic oversight, and
+                technical support for the school sustainability and
+                stewardship programme. This senior role is ideal for a professional with substantial
+                experience in education programmes, academia, school systems,
+                environmental education, sustainability, or development
+                programmes.
+            </p>
+
+
+            <h3>Key Responsibilities</h3>
+
+            <ul>
+
+                <li>
+                    Coordinate overall programme planning and implementation
+                    across the project Location.
+                </li>
+
+                <li>
+                    Provide strategic guidance to District
+                    Coordinators and field teams.
+                </li>
+
+                <li>
+                    Coordinate with senior stakeholders, education
+                    institutions, government departments, academic
+                    institutions, and programme partners.
+                </li>
+
+                <li>
+                    Support the development and refinement of educational
+                    modules, training materials, and programme methodologies.
+                </li>
+
+                <li>
+                    Ensure environmental and sustainability concepts translate
+                    into age-appropriate and practical learning experiences.
+                </li>
+
+                <li>
+                    Guide Training of Trainers (ToT) and teacher
+                    capacity-building programmes.
+                </li>
+
+                <li>
+                    Review school engagement plans, field progress, and
+                    overall programme quality.
+                </li>
+
+                <li>
+                    Support the development of monitoring frameworks,
+                    baseline/ endline processes, and programme documentation.
+                </li>
+
+                <li>
+                    Review field data, reports, and implementation challenges
+                    to provide necessary course corrections.
+                </li>
+
+                <li>
+                    Document innovations, success stories, behavioural
+                    changes, and replicable models.
+                </li>
+
+            </ul>
+
+
+            <h3>Desired Profile</h3>
+
+            <ul>
+                <li>
+                    <strong>Experience:</strong> 8-12+ years
+                </li>
+                <li>
+                    <strong>Education:</strong>
+                    Postgraduate degree in Education, Environmental Sciences,
+                    Environmental Studies, Sustainability, Development Studies,
+                    Life Sciences, or a related discipline.
+                </li>
+
+                <li>
+                    <strong>Experience:</strong>
+                    Strong preference for candidates with experience in
+                    academia, the development sector, teacher training,
+                    school-based programmes, or environmental education.
+                </li>
+
+                <li>
+                    <strong>Stakeholder Management:</strong>
+                    Proven experience managing multi-stakeholder programmes
+                    and working with government/institutional bodies.
+                </li>
+
+                <li>
+                    <strong>Sector Knowledge:</strong>
+                    Deep understanding of the Indian school education system.
+                </li>
+
+                <li>
+                    <strong>Core Skills:</strong>
+                    Excellent communication, presentation, writing, and
+                    coordination skills.
+                </li>
+
+                <li>
+                    <strong>Leadership:</strong>
+                    Ability to mentor and manage multidisciplinary field teams.
+                </li>
+
+                <li>
+                    <strong>Travel:</strong>
+                    Willingness to travel to project locations when required.
+                </li>
+
+            </ul>
+          <h3><strong>Position level: 
+                </strong> </h3>
+                 <ul>
+
+                <li>
+               Senior-Level
+                </li> </ul>
+
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+        /* =====================================================
+           4. DISTRICT COORDINATOR
+        ===================================================== */
+
+        {
+            title: "District Coordinator (Prayagraj ) (1 Position)",
+
+            shortDesc:
+                "Manage day-to-day coordination and implementation of the programme across schools in Prayagraj and Kaushambi.",
+
+            location: "Prayagraj (Covering Prayagraj & Kaushambi)",
+            duration: "Full-time",
+            experience: "5–8 years",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+        <div class="job-programme-intro">
+
+    <h2>
+        Call for Applications: ‘Nurturing Responsible Stewards for a Sustainable Future’ Programme
+    </h2>
+
+    <p>
+       We are implementing a school-based programme to nurture environmentally responsible and socially responsive young citizens through education, practical learning, and school-community engagement.
+    </p>
+
+    <p>
+        The programme will operate across selected schools in Prayagraj and
+        Kaushambi (Uttar Pradesh) reaching students from Classes 6 – 12.
+        The focus areas include climate change, environmental education,
+        water conservation, WASH, health and hygiene, sustainable lifestyles,
+        student leadership, digital learning, and school-level sustainability
+        initiatives.
+    </p>
+
+    <p class="programme-invite">
+        We invite applications from qualified, passionate professionals
+        for the following position
+    </p>
+
+</div>
+
+            <h3>About the Role</h3>
+
+            <p>
+                The <strong>District Programme Coordinator</strong> will
+                manage the day-to-day coordination and implementation of
+                the programme at the district level. This professional will work closely with principals, teachers,
+                school management, field associates, and the Delhi programme
+                team. The ideal candidate is comfortable working within the school system, managing field teams, and converting project plans into practical school-level activities.
+            </p>
+
+
+            <h3>Key Responsibilities</h3>
+
+            <ul>
+
+                <li>
+                    Coordinate implementation across assigned schools and
+                    school clusters.
+                </li>
+
+                <li>
+                    Establish and maintain professional relationships with
+                    principals, teachers, and school management.
+                </li>
+
+                <li>
+                    Prepare school visit and activity schedules in
+                    coordination with field teams.
+                </li>
+
+                <li>
+                    Lead and support Training of Trainers (ToT) and teacher
+                    orientation programmes.
+                </li>
+
+                <li>
+                    Train, mentor, and supervise Field/ Education Associates.
+                </li>
+
+                <li>
+                    Support the implementation of climate, environmental,
+                    WASH, health, hygiene, and sustainability activities.
+                </li>
+
+                <li>
+                    Coordinate the formation and daily functioning of
+                    school-level climate and sustainability clubs.
+                </li>
+
+                <li>
+                    Support baseline, monitoring, and endline data collection.
+                </li>
+
+                <li>
+                    Identify implementation challenges and resolve them in
+                    consultation with the Programme Coordinator.
+                </li>
+
+                <li>
+                    Coordinate with district-level education stakeholders
+                    and relevant institutions.
+                </li>
+
+                <li>
+                    Prepare regular district-level progress reports.
+                </li>
+
+                <li>
+                    Support community outreach and school-community
+                    engagement activities.
+                </li>
+
+            </ul>
+
+
+            <h3>Desired Profile</h3>
+
+            <ul>
+ <li>
+                    <strong>Experience:</strong> Preferably 5-8 years
+                </li>
+                <li>
+                    <strong>Education:</strong>
+                    Postgraduate or graduate degree in Education,
+                    Environmental Science, Environmental Studies,
+                    Social Sciences, Development Studies, Life Sciences,
+                    or a related field.
+                </li>
+
+                <li>
+                    <strong>Experience:</strong>
+                    5–8 years in education, school programmes,
+                    NGO/development initiatives, teacher training,
+                    or community-based programmes.
+                </li>
+
+                <li>
+                    <strong>Field Leadership:</strong>
+                    Experience managing field teams and working directly
+                    with school leadership (Principals & Teachers) is highly desirable.
+                </li>
+
+                <li>
+                    <strong>Training Skills:</strong>
+                    Proven experience conducting ToTs, workshops,
+                    or formal training sessions.
+                </li>
+
+                <li>
+                    <strong>Language:</strong>
+                    Proficiency in both English and Hindi is essential.
+                </li>
+
+                <li>
+                    <strong>Travel:</strong>
+                    Comfortable with frequent travel within the assigned
+                    district and surrounding areas.
+                </li>
+
+            </ul>
+
+              <h3><strong>Position level: 
+                </strong> </h3>
+                 <ul>
+
+                <li>
+                   Mid-Senior level
+                </li>
+                </ul>
+             
+
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+        /* =====================================================
+           5. EDUCATION ASSOCIATE
+        ===================================================== */
+
+        {
+            title: "Programme Associates (Prayagraj & Kaushambi) (4 Positions)",
+
+            shortDesc:
+                "Serve as the primary school-level implementation team, delivering interactive learning activities and supporting students, teachers, and school authorities.",
+
+            location: "Prayagraj & Kaushambi",
+            duration: "Full-time",
+            experience: "2 years or more (Open to passionate freshers)",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+        <div class="job-programme-intro">
+
+    <h2>
+        Call for Applications: ‘Nurturing Responsible Stewards for a Sustainable Future’ Programme
+    </h2>
+
+    <p>
+       We are implementing a school-based programme to nurture environmentally responsible and socially responsive young citizens through education, practical learning, and school-community engagement.
+    </p>
+
+    <p>
+        The programme will operate across selected schools in Prayagraj and
+        Kaushambi (Uttar Pradesh) reaching students from Classes 6 – 12.
+        The focus areas include climate change, environmental education,
+        water conservation, WASH, health and hygiene, sustainable lifestyles,
+        student leadership, digital learning, and school-level sustainability
+        initiatives.
+    </p>
+
+    <p class="programme-invite">
+        We invite applications from qualified, passionate professionals
+        for the following position
+    </p>
+
+</div>
+            <h3>About the Role</h3>
+
+            <p>
+                Programme Associates will serve as the primary implementation
+                team at the school level. They will work directly with students,
+                teachers, and school authorities to deliver programme activities
+                and collect field data. This role requires individuals who genuinely enjoy working with
+                children, feel confident in a classroom environment, and can
+                independently facilitate interactive activities.
+            </p>
+
+
+            <h3>Key Responsibilities</h3>
+
+            <ul>
+
+                <li>
+                    Conduct regular field visits to assigned schools.
+                </li>
+
+                <li>
+                    Coordinate with teachers and school authorities prior
+                    to scheduled programme activities.
+                </li>
+
+                <li>
+                    Deliver age-appropriate sessions and interactive activities
+                    for students from Classes 6–12.
+                </li>
+
+                <li>
+                    Conduct workshops, demonstrations, quizzes, competitions,
+                    group activities, and practical learning exercises.
+                </li>
+
+                <li>
+                    Collect and review field data, student attendance,
+                    school activity records, and documentation.
+                </li>
+
+                <li>
+                    Facilitate and energise school climate and sustainability
+                    club activities.
+                </li>
+
+                <li>
+                    Conduct teacher orientations and support teacher-led
+                    activities as required.
+                </li>
+
+                <li>
+                    Drive on-ground WASH, water conservation, environmental
+                    awareness, health, and hygiene activities.
+                </li>
+
+                <li>
+                    Maintain meticulous school visit records, attendance
+                    sheets, photographs, and activity documentation.
+                </li>
+
+                <li>
+                    Report field-level challenges and qualitative observations
+                    to the District Coordinator.
+                </li>
+
+                <li>
+                    Ensure all programme activities are delivered in an
+                    engaging, participatory, and child-friendly manner.
+                </li>
+
+            </ul>
+
+
+            <h3>Desired Profile</h3>
+
+            <ul>
+<li>  <strong>Experience:</strong> 2 years or more
+(Open to passionate freshers)</li>
+                <li>
+                    <strong>Education:</strong>
+                    Graduate degree in Education, Environmental Sciences,
+                    Environmental Studies, Life Sciences, Social Sciences,
+                    or related disciplines.
+                </li>
+
+                <li>
+                    <strong>Classroom Confidence:</strong>
+                    Comfortable speaking, presenting, and managing dynamics
+                    in front of large groups of students and teachers.
+                </li>
+
+                <li>
+                    <strong>Facilitation Skills:</strong>
+                    Strong preference for candidates who have conducted
+                    school sessions, interactive workshops, baseline surveys,
+                    or awareness campaigns.
+                </li>
+
+                <li>
+                    <strong>Soft Skills:</strong>
+                    Good communication, empathy, presentation, and
+                    interpersonal skills.
+                </li>
+
+                <li>
+                    <strong>Mindset:</strong>
+                    Highly motivated to work on environmental and social
+                    issues with a child-centric approach.
+                </li>
+
+                <li>
+                    <strong>Language:</strong>
+                    Fluency in Hindi is mandatory; working knowledge of
+                    English is preferred.
+                </li>
+
+            </ul>
+
+     <h3><strong>Position level: 
+                </strong> </h3>
+                 <ul>
+
+                <li>
+                 Entry to Mid-Level
+                </li> </ul>
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+        /* =====================================================
+           6. IT & DIGITAL LEARNING ASSOCIATE
+        ===================================================== */
+
+        {
+            title: "IT Engineer (New Delhi) (1 Position)",
+
+            shortDesc:
+                "Provide technical support for school computer labs, digital learning systems, technology deployment, and digital literacy programmes.",
+
+            location: "Prayagraj",
+            duration: "Full-time",
+            experience: "2–4 years",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+        <div class="job-programme-intro">
+
+    <h2>
+        Call for Applications: ‘Nurturing Responsible Stewards for a Sustainable Future’ Programme
+    </h2>
+
+    <p>
+       We are implementing a school-based programme to nurture environmentally responsible and socially responsive young citizens through education, practical learning, and school-community engagement.
+    </p>
+
+    <p>
+        The programme will operate across selected schools in Prayagraj and
+        Kaushambi (Uttar Pradesh) reaching students from Classes 6 – 12.
+        The focus areas include climate change, environmental education,
+        water conservation, WASH, health and hygiene, sustainable lifestyles,
+        student leadership, digital learning, and school-level sustainability
+        initiatives.
+    </p>
+
+    <p class="programme-invite">
+        We invite applications from qualified, passionate professionals
+        for the following position
+    </p>
+
+</div>
+
+            <h3>About the Role</h3>
+
+            <p>
+                The <strong>IT &amp; Digital Engineer Associate</strong>
+                will provide critical technical support for the digital
+                learning component of the project.
+            </p>
+
+            <p>
+                They will ensure that school computer labs are functional,
+                manage technology deployment, and build digital literacy
+                capacities among students and teachers.
+            </p>
+
+
+            <h3>Key Responsibilities</h3>
+
+            <ul>
+
+                <li>
+                    Provide on-ground technical support for setting up
+                    and maintaining school computer labs.
+                </li>
+
+                <li>
+                    Handle hardware and software troubleshooting,
+                    internet connectivity issues, and device maintenance.
+                </li>
+
+                <li>
+                    Conduct digital learning orientations and basic
+                    computer literacy training sessions for students
+                    and teachers.
+                </li>
+
+                <li>
+                    Assist the programme team in deploying digital
+                    learning modules and educational software.
+                </li>
+
+                <li>
+                    Monitor infrastructure usage and maintain inventory
+                    logs of hardware components across schools.
+                </li>
+
+                <li>
+                    Coordinate with vendors or central IT teams to resolve
+                    major technical breakdowns.
+                </li>
+
+            </ul>
+
+
+            <h3>Desired Profile</h3>
+
+            <ul>
+<li>  <strong>Experience:</strong> More than 2 years</li>
+                <li>
+                    <strong>Education:</strong>
+                    Graduate degree or diploma in Computer Application
+                    (BCA/ MCA), Information Technology, Computer Science,
+                    or a related technical certification.
+                </li>
+
+                <li>
+                    <strong>Technical Skills:</strong>
+                    Strong hands-on experience with hardware troubleshooting,
+                    operating systems (Windows/Linux), basic networking,
+                    and smart-classroom setups.
+                </li>
+
+                <li>
+                    <strong>Training Ability:</strong>
+                    Ability to explain technical concepts in simple language
+                    to non-technical teachers and young students.
+                </li>
+
+                <li>
+                    <strong>Language:</strong>
+                    Fluency in Hindi is essential; basic professional
+                    English skills are required.
+                </li>
+
+            </ul>
+
+                <h3><strong>Position level: 
+                </strong> </h3>
+                 <ul>
+
+                <li>
+                 Entry to Mid-Level
+                </li> </ul>
+
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+        /* =====================================================
+           1. PROGRAMME LEAD – WILDLIFE
+        ===================================================== */
+
+        {
+            title: "Programme Lead – Wildlife (New Delhi) (1 Position)",
+
+            shortDesc:
+                "Provide strategic leadership on wildlife conservation, forestry, policy analysis, biodiversity management, and landscape-level conservation programmes.",
+
+            location: "New Delhi, India",
+            duration: "Full-time",
+            experience: "10+ years",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+
+            <h3>Job Description</h3>
+
+            <ol>
+
+                <li>
+                    Provide strategic leadership on programmes related to
+                    wildlife conservation, forestry, policy analysis, and
+                    biodiversity management.
+                </li>
+
+                <li>
+                    Lead development of policy briefs, advisory notes, and
+                    technical frameworks aligned with national and state
+                    priorities.
+                </li>
+
+                <li>
+                    Support planning, design, and implementation of
+                    landscape-level conservation initiatives, including
+                    habitat restoration and corridor management.
+                </li>
+
+                <li>
+                    Engage with government agencies such as MoEFCC, NTCA,
+                    State Forest Departments, IBCA, research institutions,
+                    and civil society organisations.
+                </li>
+
+                <li>
+                    Oversee programme planning, budgeting, monitoring,
+                    and evaluation.
+                </li>
+
+                <li>
+                    Lead and mentor interdisciplinary teams, ensuring
+                    high-quality and timely deliverables.
+                </li>
+
+                <li>
+                    Contribute to formulation of proposals and strategic
+                    partnerships.
+                </li>
+
+                <li>
+                    Facilitate knowledge dissemination through reports,
+                    publications, and stakeholder consultations.
+                </li>
+
+                <li>
+                    Contribute to the publication of the bi-monthly magazine
+                    <strong>Big Cats</strong>.
+                </li>
+
+            </ol>
+
+
+            <h3>Educational Qualification</h3>
+
+            <ul>
+
+                <li>
+                    Postgraduate degree in Wildlife Science, Environmental
+                    Science, Forestry, Ecology, Natural Resource Management,
+                    or a related field.
+                </li>
+
+                <li>
+                    A Ph.D. in a relevant discipline is
+                    <strong>essential</strong>.
+                </li>
+
+            </ul>
+
+
+            <h3>Experience</h3>
+
+            <ol>
+
+                <li>
+                    Minimum 10 years of relevant experience in forest and
+                    wildlife conservation, policy research, or programme
+                    management.
+                </li>
+
+                <li>
+                    Strong understanding of India's forests and wildlife
+                    governance framework.
+                </li>
+
+                <li>
+                    Experience working with government and various
+                    stakeholders in the sector.
+                </li>
+
+                <li>
+                    Must have published research papers in reputed
+                    magazines.
+                </li>
+
+            </ol>
+
+
+            <h3>Required Skills</h3>
+
+            <ol>
+
+                <li>
+                    Experience in wildlife policy analysis, protected area
+                    management, and human–wildlife conflict mitigation.
+                </li>
+
+                <li>
+                    Familiarity with GIS, remote sensing, and ecological
+                    data analysis.
+                </li>
+
+                <li>
+                    Excellent writing, communication, research, analytical,
+                    and stakeholder engagement skills.
+                </li>
+
+                <li>
+                    Must have the ability to lead a team.
+                </li>
+
+            </ol>
+
+
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+        /* =====================================================
+           2. ADMINISTRATIVE ASSISTANT
+        ===================================================== */
+
+        {
+            title: "Administrative Assistant (New Delhi) (1 Position)",
+
+            shortDesc:
+                "Manage day-to-day office operations, human resources, procurement, logistics, compliance, and administrative coordination for the Foundation.",
+
+            location: "New Delhi, India",
+            duration: "Full-time",
+            experience: "3+ years",
+
+            applyLink:
+                "https://sankala.org/new-aug-opportunities/",
+
+            fullDesc: `
+
+            <p>
+                The <strong>Administrative Assistant</strong> will manage
+                day-to-day office operations, human resources, procurement,
+                and logistics for the Foundation. This role ensures
+                compliance, budgetary efficiency, and smooth coordination
+                with external stakeholders.
+            </p>
+
+
+            <h3>Key Responsibilities</h3>
+
+            <ul>
+
+                <li>
+                    <strong>Administration:</strong>
+                    Manage daily office operations, maintain office records,
+                    digital filing, and workflow systems.
+                </li>
+
+                <li>
+                    <strong>Human Resources:</strong>
+                    Support recruitment, onboarding, leave tracking, and
+                    performance appraisals.
+                </li>
+
+                <li>
+                    <strong>Procurement:</strong>
+                    Coordinate vendor selection, contract management, and
+                    inventory control.
+                </li>
+
+                <li>
+                    <strong>Logistics:</strong>
+                    Facilitate travel, workshops, conferences, and various
+                    events.
+                </li>
+
+                <li>
+                    <strong>Finance &amp; Budgeting:</strong>
+                    Prepare administrative budgets and track expenditures.
+                </li>
+
+                <li>
+                    <strong>Compliance &amp; Policy:</strong>
+                    Develop SOPs and handle government-partner correspondence.
+                </li>
+
+            </ul>
+
+
+            <h3>Requirements</h3>
+
+            <ul>
+
+                <li>
+                    <strong>Education:</strong>
+                    Degree in Management, Public Administration, Commerce,
+                    or a related field.
+                </li>
+
+                <li>
+                    <strong>Experience:</strong>
+                    3+ years of experience in administration, HR, or
+                    procurement. Government/NGO background preferred.
+                </li>
+
+                <li>
+                    <strong>Skills:</strong>
+                    Strong drafting, multi-tasking, MS Office proficiency,
+                    stakeholder coordination, and project management systems.
+                </li>
+
+            </ul>
+
+
+            <p>
+                <strong>Remuneration:</strong>
+                Commensurate with experience.
+            </p>
+
+        `
+        },
+
+
+    ];
+
+
+    /* =====================================================
+       GENERATE JOB CARDS
+    ===================================================== */
+
+    function generateJobCards() {
+
+        const container = document.querySelector(".job-cards");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = "";
+
+        jobData.forEach((job, index) => {
+
+            const card = document.createElement("div");
+
+            card.classList.add("job-card");
+
+            card.innerHTML = `
+
+            <div class="job-card-title">
+                ${job.title}
+            </div>
+
+            <div class="job-card-subtitle">
+                ${job.shortDesc}
+            </div>
+
+            <div class="job-detail-buttons">
+
+                <span class="detail-button">
+                    ${job.location}
+                </span>
+
+                <span class="detail-button">
+                    ${job.duration}
+                </span>
+
+                <span class="detail-button">
+                    ${job.experience}
+                </span>
+
+            </div>
+
+            <button
+                type="button"
+                class="card-buttons"
+                onclick="openModal(${index})"
+            >
+                View More
+            </button>
+
+        `;
+
+            container.appendChild(card);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       OPEN MODAL
+    ===================================================== */
+
+    function openModal(index) {
+
+        const modal = document.getElementById("jobModal");
+        const title = document.getElementById("modalTitle");
+        const body = document.getElementById("modalBody");
+        const applyButton = document.getElementById("modalApply");
+
+        title.innerText = jobData[index].title;
+
+        body.innerHTML = jobData[index].fullDesc;
+
+        applyButton.href = jobData[index].applyLink;
+
+        modal.style.display = "block";
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODAL
+    ===================================================== */
+
+    function closeModal() {
+
+        const modal = document.getElementById("jobModal");
+
+        modal.style.display = "none";
+
+        document.body.style.overflow = "auto";
+
+    }
+
+
+    /* =====================================================
+       CLOSE ON OUTSIDE CLICK
+    ===================================================== */
+
+    window.addEventListener("click", function (event) {
+
+        const modal = document.getElementById("jobModal");
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    });
+
+
+    /* =====================================================
+       CLOSE WITH ESC KEY
+    ===================================================== */
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+
+            const modal = document.getElementById("jobModal");
+
+            if (modal.style.display === "block") {
+
+                closeModal();
+
+            }
+
+        }
+
+    });
+
+
+    /* =====================================================
+       LOAD JOB CARDS
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        generateJobCards
+    );
+
+</script>
