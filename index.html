@@ -324,6 +324,15 @@
   .process-pill video{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#000;
   }
+  .sound-btn{
+    position:absolute;top:1rem;left:1rem;z-index:3;
+    padding:.55rem 1.05rem;border-radius:99px;border:1px solid rgba(244,239,228,.35);
+    background:rgba(11,10,8,.7);color:var(--cream);font:600 .85rem 'Outfit',sans-serif;letter-spacing:.04em;
+    cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s,background .2s;
+    backdrop-filter:blur(6px);
+  }
+  .sound-btn.show{opacity:1;pointer-events:auto;}
+  .sound-btn:hover{background:var(--clay);}
   .process-pill::after{
     content:'';position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg, rgba(11,10,8,0) 55%, rgba(11,10,8,.4) 100%);
@@ -1059,6 +1068,7 @@
           <source src="Images/video/Project Hunar is Anubhav NGOs answer to a simple question- what happens when a woman is given a.mp4" type="video/mp4">
           Your browser does not support embedded video.
         </video>
+        <button type="button" class="sound-btn" id="soundBtn" aria-pressed="false">🔊 Tap for sound</button>
       </div>
       <span class="process-label" id="labelRight">Project Hunar?</span>
     </div>
@@ -1465,6 +1475,20 @@ const IS_MOBILE_STAGE = () => window.innerWidth <= 860;
 const PILL_MIN = { w: 230, h: 100 };
 const PILL_RADIUS = { min: 100, max: 28 };
 
+// Browsers only autoplay muted video, so sound is switched on by an explicit click
+const soundBtn = document.getElementById('soundBtn');
+if (soundBtn && hunarVideo) {
+  soundBtn.addEventListener('click', () => {
+    const turnOn = hunarVideo.muted;
+    if (turnOn) hunarVideo.currentTime = 0;
+    hunarVideo.muted = !turnOn;
+    hunarVideo.volume = 1;
+    hunarVideo.play().catch(() => {});
+    soundBtn.textContent = turnOn ? '🔇 Mute' : '🔊 Tap for sound';
+    soundBtn.setAttribute('aria-pressed', String(turnOn));
+  });
+}
+
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -1475,6 +1499,7 @@ function updateProcessStage() {
     if (hunarVideo && !hunarVideo.hasAttribute('controls')) {
       hunarVideo.setAttribute('controls', '');
     }
+    if (soundBtn) soundBtn.classList.add('show');
     return;
   }
   const rect = processStage.getBoundingClientRect();
@@ -1511,6 +1536,7 @@ function updateProcessStage() {
   if (hunarVideo) {
     if (progress > 0.45) hunarVideo.setAttribute('controls', '');
     else hunarVideo.removeAttribute('controls');
+    if (soundBtn) soundBtn.classList.toggle('show', progress > 0.3);
     if (progress > 0.04 && hunarVideo.paused) hunarVideo.play().catch(() => {});
   }
 }
