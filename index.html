@@ -4,8 +4,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Hunar — A Social Enterprise of Anubhav NGO</title>
-<meta name="description" content="Project Hunar trains women from underserved communities in tailoring, crochet and Madhubani art. Every order sustains a livelihood she built from scratch.">
+<title>Project Hunar — Women Artisans, Handmade Crafts &amp; Madhubani Art | Anubhav NGO</title>
+<meta name="description" content="Project Hunar by Anubhav NGO (anubhavngo.in) trains women from underserved communities in Delhi in tailoring, crochet and Madhubani art. Every order sustains a livelihood she built from scratch.">
+<meta name="keywords" content="Project Hunar, Anubhav NGO, anubhavngo.in, women empowerment, handmade products, Madhubani painting, Mithila art, crochet, tailoring, CSR gifting, Delhi NGO">
+<meta name="author" content="Anubhav NGO">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0a08">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Project Hunar by Anubhav NGO">
+<meta property="og:title" content="Project Hunar — A Social Enterprise of Anubhav NGO">
+<meta property="og:description" content="Handmade crafts and Madhubani art by women artisans trained at Anubhav NGO. Bulk and custom orders welcome.">
+<meta property="og:image" content="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png">
+<meta property="og:see_also" content="https://www.anubhavngo.in">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Project Hunar — A Social Enterprise of Anubhav NGO">
+<meta name="twitter:description" content="Handmade crafts and Madhubani art by women artisans trained at Anubhav NGO.">
+<meta name="twitter:image" content="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NGO",
+      "@id": "https://www.anubhavngo.in/#organization",
+      "name": "Anubhav NGO",
+      "alternateName": "Anubhav Educational & Social Welfare Society",
+      "url": "https://www.anubhavngo.in",
+      "logo": "https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png",
+      "email": "contact@anubhavngo.in",
+      "telephone": "+91-79827-99527",
+      "sameAs": ["https://www.anubhavngo.in", "https://www.instagram.com/anubhav.ngo"],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-128/1, Second Floor, Mohammad Pur, Near Bhikaji Cama Place",
+        "addressLocality": "New Delhi",
+        "postalCode": "110066",
+        "addressCountry": "IN"
+      },
+      "contactPoint": [
+        {"@type": "ContactPoint", "contactType": "coordinator", "name": "Anubhav NGO", "telephone": "+91-79827-99527"},
+        {"@type": "ContactPoint", "contactType": "coordinator", "name": "Sudhir William", "telephone": "+91-96252-20574"},
+        {"@type": "ContactPoint", "contactType": "coordinator", "name": "Sudhir William", "telephone": "+91-95606-44269"}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Project Hunar",
+      "description": "A social enterprise initiative of Anubhav NGO training women in tailoring, crochet and Madhubani art.",
+      "parentOrganization": {"@id": "https://www.anubhavngo.in/#organization"},
+      "url": "https://www.anubhavngo.in",
+      "sameAs": ["https://www.anubhavngo.in"]
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -270,7 +322,7 @@
     will-change:width,height,border-radius;
   }
   .process-pill video{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#000;
   }
   .process-pill::after{
     content:'';position:absolute;inset:0;pointer-events:none;
@@ -300,6 +352,23 @@
   .quote-visual .big-mark{
     font-family:'Outfit',sans-serif;font-size:8rem;line-height:1;color:rgba(244,239,228,.12);
     position:absolute;top:1rem;left:1.4rem;
+  }
+  .quote-visual .process-video{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:32% 50%;z-index:0;
+  }
+  .quote-visual.has-video::after{
+    content:'';position:absolute;inset:0;z-index:1;
+    background:linear-gradient(to top, rgba(11,10,8,.88) 8%, rgba(11,10,8,.15) 60%, transparent);
+  }
+  .quote-visual.has-video .big-mark{z-index:2;}
+  .loop-card{
+    position:relative;margin:0 0 2.6rem;border-radius:1.2rem;overflow:hidden;
+    max-width:760px;aspect-ratio:16/9;border:1px solid var(--line-light);
+  }
+  .loop-card video{width:100%;height:100%;object-fit:cover;display:block;}
+  .loop-card figcaption{
+    position:absolute;left:1rem;bottom:1rem;padding:.4rem .9rem;border-radius:99px;
+    background:rgba(11,10,8,.65);color:var(--cream);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
   }
   .quote-visual p{
     font-family:'Outfit',sans-serif;font-style:italic;font-size:1.3rem;line-height:1.4;color:var(--cream);
@@ -930,7 +999,7 @@
     <span class="nav-brand-img"><img src="https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png" alt="Anubhav NGO"></span>
     <span class="nav-brand-text">
       <b>Project Hunar</b>
-      <span>by Anubhav</span>
+      <span>by Anubhav NGO</span>
     </span>
   </a>
   <nav class="nav-pill" id="navPill" aria-label="Primary">
@@ -1004,7 +1073,8 @@
     <img src="Images/elements/needle-thread.png" alt="">
   </div>
   <div class="wrap quote-panel">
-    <div class="quote-visual reveal">
+    <div class="quote-visual has-video reveal">
+      <video class="process-video" src="Images/video/hunar-stitching-process.mp4" poster="Images/video/hunar-stitching-process.jpg" muted autoplay loop playsinline preload="metadata" aria-label="A Project Hunar artisan stitching on a sewing machine"></video>
       <span class="big-mark">”</span>
       <p>He does not just supervise. He mentors, encourages, and pushes every woman in the workshop to do her best work.</p>
     </div>
@@ -1132,6 +1202,11 @@
     <p class="body-text">Each pouch is stitched with care. Each tote is built to last. Each crochet flower is looped by hand, one stitch at a time, until something that started as yarn becomes something you want to keep on your desk. Particularly well suited for corporate gifting, personal occasions, festive hampers, and retail.</p>
     <p class="body-text" style="margin-bottom:2.6rem;">Custom prints, colours, and sizes available on request. Minimum order: 25 pieces.</p>
 
+    <figure class="loop-card reveal">
+      <video src="Images/video/hunar-artisans-pouches.mp4" poster="Images/video/hunar-artisans-pouches.jpg" muted autoplay loop playsinline preload="metadata" aria-label="Project Hunar artisans showing their handmade quilted pouches"></video>
+      <figcaption>Made by our artisans</figcaption>
+    </figure>
+
     <div class="slider-shell">
       <div class="slider-head">
         <div>
@@ -1251,8 +1326,10 @@
       <div class="contact-grid">
         <div>
           <h4>Coordinators</h4>
-          <p>Sudhir William / Minakshi Raj</p>
-          <p style="font-weight:700;">9810388330 / +91 79827 99527</p>
+          <p>Anubhav NGO</p>
+          <p style="font-weight:700;"><a href="tel:+917982799527">+91 79827 99527</a></p>
+          <p style="margin-top:.6rem;">Sudhir William</p>
+          <p style="font-weight:700;"><a href="tel:+919625220574">+91 96252 20574</a> / <a href="tel:+919560644269">+91 95606 44269</a></p>
           <p class="muted">Office hours: 10am to 5pm</p>
         </div>
         <div>
@@ -1407,8 +1484,9 @@ function updateProcessStage() {
   progress = Math.min(Math.max(progress, 0), 1);
   const eased = easeOutCubic(progress);
 
-  const maxW = Math.min(window.innerWidth * 0.92, 1200);
-  const maxH = vh * 0.66;
+  // Final frame matches the video's 16:9 ratio so nothing (incl. burned-in captions) is cropped
+  const maxH = Math.min(vh * 0.8, window.innerWidth * 0.92 * 9 / 16, 675);
+  const maxW = maxH * 16 / 9;
 
   const width = lerp(PILL_MIN.w, maxW, eased);
   const height = lerp(PILL_MIN.h, maxH, eased);
