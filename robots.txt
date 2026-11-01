@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /archive/
+Disallow: /tools/
+
+Sitemap: https://projecthunar.in/sitemap.xml
