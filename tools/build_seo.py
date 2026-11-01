@@ -8,7 +8,7 @@ It rewrites, in catalogue.html, the filter chips, the product cards (real HTML s
 search engines can read them) and the JSON-LD block, and regenerates sitemap.xml
 (including product image entries) and robots.txt.
 """
-import os, re, json, html, datetime
+import os, re, json, html, datetime, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
@@ -64,25 +64,27 @@ def main():
     items = load_items()
     cats = [c for c in ORDER if any(i['cat'] == c for i in items)]
 
-    chips = ['<div class="cat-filters" id="catFilters" role="group" aria-label="Filter products by category">']
-    chips.append('  <button type="button" class="cat-chip active" data-cat="All" aria-pressed="true">All<span>%d</span></button>' % len(items))
+    chips = ['<ul class="shop-cats" id="catFilters">']
+    chips.append('  <li><button type="button" class="cat-chip active" data-cat="All" aria-pressed="true">All products<span>%d</span></button></li>' % len(items))
     for c in cats:
         n = sum(1 for i in items if i['cat'] == c)
-        chips.append('  <button type="button" class="cat-chip" data-cat="%s" aria-pressed="false" title="%s">%s<span>%d</span></button>' % (esc(c), esc(BLURB[c]), esc(c), n))
-    chips.append('</div>')
+        chips.append('  <li><button type="button" class="cat-chip" data-cat="%s" aria-pressed="false">%s<span>%d</span></button></li>' % (esc(c), esc(c), n))
+    chips.append('</ul>')
 
     cards = []
-    for it in items:
+    for n, it in enumerate(items):
         alt = '%s — handmade by women artisans at Project Hunar' % it['label']
+        wa = 'https://wa.me/917982799527?text=' + urllib.parse.quote('Hi Project Hunar, I would like to enquire about: %s' % it['label'])
         cards.append(
-            '      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="0" data-cat="%s" data-src="%s">\n'
-            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"></div>\n'
+            '      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="0" data-order="%d" data-cat="%s" data-src="%s" data-name="%s">\n'
+            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"><span class="cat-badge">Made to order</span></div>\n'
             '        <div class="cat-card-body">\n'
             '          <span class="cat-card-cat">%s</span>\n'
             '          <h2 class="cat-card-title">%s</h2>\n'
-            '          <span class="cat-card-meta">Made to order · Min. 25 pcs</span>\n'
+            '          <span class="cat-card-meta">Min. order 25 pcs · Customisable</span>\n'
+            '          <a class="cat-enquire" href="%s" target="_blank" rel="noopener">Enquire on WhatsApp</a>\n'
             '        </div>\n'
-            '      </article>' % (esc(it['cat']), esc(it['src']), esc(it['src']), esc(alt), esc(it['cat']), esc(it['label'])))
+            '      </article>' % (n, esc(it['cat']), esc(it['src']), esc(it['label'].lower()), esc(it['src']), esc(alt), esc(it['cat']), esc(it['label']), esc(wa)))
 
     ld = {
         '@context': 'https://schema.org',
