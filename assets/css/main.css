@@ -1034,3 +1034,15 @@
     .shop .cat-grid{grid-template-columns:repeat(2,1fr);gap:.8rem;}
   }
   .shop-more .btn[hidden]{display:none;}
+  /* latest arrivals */
+  .cat-badge{position:absolute;top:.7rem;left:.7rem;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:.35rem .6rem;border-radius:999px;background:rgba(11,10,8,.78);color:var(--cream);}
+  .cat-badge.new{background:var(--clay);color:#fff;}
+  .cat-chip-new{color:var(--clay);font-weight:700;}
+  .cat-chip-new:hover{color:var(--clay);}
+  .latest-wrap{position:relative;z-index:1;}
+  .latest-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+  .latest-head .body-text{max-width:56ch;}
+  .latest-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+  .latest-grid{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:1rem;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+  .latest-grid .cat-card{flex:0 0 clamp(220px,24vw,300px);scroll-snap-align:start;}
+  @media (max-width:640px){.latest-grid{gap:.8rem;}.latest-grid .cat-card{flex-basis:62vw;}}

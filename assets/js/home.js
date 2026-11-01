@@ -587,3 +587,12 @@ if (partnerCards.length) {
     }
   }
 })();
+
+/* Latest arrivals - horizontal scroller arrows */
+(function () {
+  const grid = document.getElementById('latestGrid');
+  if (!grid) return;
+  const step = dir => grid.scrollBy({ left: dir * Math.max(240, grid.clientWidth * 0.8), behavior: 'smooth' });
+  document.getElementById('latestPrev').addEventListener('click', () => step(-1));
+  document.getElementById('latestNext').addEventListener('click', () => step(1));
+})();

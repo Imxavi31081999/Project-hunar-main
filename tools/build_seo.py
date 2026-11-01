@@ -43,8 +43,8 @@ def load_items():
     items = []
     for name in ('madhubaniItems', 'handmadeItems'):
         block = re.search(r'const %s = \[(.*?)\n\];' % name, js, re.S).group(1)
-        for src, label, cat in re.findall(r'src:\s*"([^"]+)",\s*label:\s*"([^"]+)",\s*cat:\s*"([^"]+)"', block):
-            items.append({'src': src, 'label': json.loads('"%s"' % label), 'cat': cat})
+        for src, label, cat, new in re.findall(r'src:\s*"([^"]+)",\s*label:\s*"([^"]+)",\s*cat:\s*"([^"]+)"(,\s*isNew:\s*true)?', block):
+            items.append({'src': src, 'label': json.loads('"%s"' % label), 'cat': cat, 'new': bool(new), 'sidx': len(items)})
     return items
 
 
@@ -61,11 +61,15 @@ def swap(text, tag, body):
 
 
 def main():
-    items = load_items()
+    all_items = load_items()
+    items = [i for i in all_items if i['new']] + [i for i in all_items if not i['new']]
     cats = [c for c in ORDER if any(i['cat'] == c for i in items)]
 
     chips = ['<ul class="shop-cats" id="catFilters">']
     chips.append('  <li><button type="button" class="cat-chip active" data-cat="All" aria-pressed="true">All products<span>%d</span></button></li>' % len(items))
+    nnew = sum(1 for i in items if i['new'])
+    if nnew:
+        chips.append('  <li><button type="button" class="cat-chip cat-chip-new" data-cat="Latest Arrivals" aria-pressed="false">Latest arrivals<span>%d</span></button></li>' % nnew)
     for c in cats:
         n = sum(1 for i in items if i['cat'] == c)
         chips.append('  <li><button type="button" class="cat-chip" data-cat="%s" aria-pressed="false">%s<span>%d</span></button></li>' % (esc(c), esc(c), n))
@@ -76,14 +80,14 @@ def main():
         alt = '%s — handmade by women artisans at Project Hunar' % it['label']
         wa = 'https://wa.me/917982799527?text=' + urllib.parse.quote('Hi Project Hunar, I would like to enquire about: %s' % it['label'])
         cards.append(
-            '      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="0" data-order="%d" data-cat="%s" data-src="%s" data-name="%s">\n'
-            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"></div>\n'
+            '      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="0" data-order="%d" data-new="%s" data-cat="%s" data-src="%s" data-name="%s">\n'
+            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750">%s</div>\n'
             '        <div class="cat-card-body">\n'
             '          <span class="cat-card-cat">%s</span>\n'
             '          <h2 class="cat-card-title">%s</h2>\n'
             '          <a class="cat-enquire" href="%s" target="_blank" rel="noopener">Enquire on WhatsApp</a>\n'
             '        </div>\n'
-            '      </article>' % (n, esc(it['cat']), esc(it['src']), esc(it['label'].lower()), esc(it['src']), esc(alt), esc(it['cat']), esc(it['label']), esc(wa)))
+            '      </article>' % (n, '1' if it['new'] else '0', esc(it['cat']), esc(it['src']), esc(it['label'].lower()), esc(it['src']), esc(alt), '<span class="cat-badge new">New</span>' if it['new'] else '', esc(it['cat']), esc(it['label']), esc(wa)))
 
     ld = {
         '@context': 'https://schema.org',
@@ -125,6 +129,23 @@ def main():
         ],
     }
     ld_html = '<script type="application/ld+json">\n' + json.dumps(ld, indent=1, ensure_ascii=False) + '\n</script>'
+
+    latest = [i for i in all_items if i['new']]
+    home_cards = []
+    for it in latest:
+        alt = '%s \u2014 handmade by women artisans at Project Hunar' % it['label']
+        home_cards.append(
+            '      <article class="cat-card" data-lb-open data-collection="showcase" data-idx="%d">\n'
+            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"><span class="cat-badge new">New</span></div>\n'
+            '        <div class="cat-card-body">\n'
+            '          <span class="cat-card-cat">%s</span>\n'
+            '          <h3 class="cat-card-title">%s</h3>\n'
+            '        </div>\n'
+            '      </article>' % (it['sidx'], esc(it['src']), esc(alt), esc(it['cat']), esc(it['label'])))
+    home = read('index.html')
+    if latest:
+        home = swap(home, 'LATEST', '\n'.join(home_cards))
+    write('index.html', home)
 
     cat = read('catalogue.html')
     cat = swap(cat, 'CHIPS', '    ' + '\n    '.join(chips))

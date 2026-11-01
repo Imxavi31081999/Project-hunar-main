@@ -1,6 +1,8 @@
 /* ============================================================
    PRODUCT DATA - single source of truth for the home page sliders,
    the product wall, the lightbox and the catalogue page.
+   Mark a product as a latest arrival with  isNew: true  (shown first, with a
+   "New" badge, in the Latest Arrivals filter and on the home page).
    After editing, run:  python tools/build_seo.py
    (regenerates the static catalogue HTML, structured data and sitemap)
    ============================================================ */
@@ -25,11 +27,11 @@ const madhubaniItems = [
 ];
 
 const handmadeItems = [
-  { src: "assets/img/products/crochet/crochet-tote-sunflower-granny-square.webp", label: "Crochet Tote — Sunflower Granny Square", cat: "Crochet Bags" },
-  { src: "assets/img/products/crochet/crochet-tote-sunflower-with-strawberry-charm.webp", label: "Crochet Tote — Sunflower with Strawberry Charm", cat: "Crochet Bags" },
-  { src: "assets/img/products/crochet/crochet-tote-red-sunflower.webp", label: "Crochet Tote — Red Sunflower", cat: "Crochet Bags" },
-  { src: "assets/img/products/crochet/crochet-hobo-bag-cream-with-red-roses.webp", label: "Crochet Hobo Bag — Cream with Red Roses", cat: "Crochet Bags" },
-  { src: "assets/img/products/crochet/crochet-hobo-bag-beige-with-pink-roses.webp", label: "Crochet Hobo Bag — Beige with Pink Roses", cat: "Crochet Bags" },
+  { src: "assets/img/products/crochet/crochet-tote-sunflower-granny-square.webp", label: "Crochet Tote — Sunflower Granny Square", cat: "Crochet Bags", isNew: true },
+  { src: "assets/img/products/crochet/crochet-tote-sunflower-with-strawberry-charm.webp", label: "Crochet Tote — Sunflower with Strawberry Charm", cat: "Crochet Bags", isNew: true },
+  { src: "assets/img/products/crochet/crochet-tote-red-sunflower.webp", label: "Crochet Tote — Red Sunflower", cat: "Crochet Bags", isNew: true },
+  { src: "assets/img/products/crochet/crochet-hobo-bag-cream-with-red-roses.webp", label: "Crochet Hobo Bag — Cream with Red Roses", cat: "Crochet Bags", isNew: true },
+  { src: "assets/img/products/crochet/crochet-hobo-bag-beige-with-pink-roses.webp", label: "Crochet Hobo Bag — Beige with Pink Roses", cat: "Crochet Bags", isNew: true },
   { src: "assets/img/products/pouches/cosmetic-pouch-peach-floral.webp", label: "Cosmetic Pouch — Peach Floral", cat: "Pouches" },
   { src: "assets/img/products/pouches/cosmetic-pouch-blue-elephant.webp", label: "Cosmetic Pouch — Blue Elephant", cat: "Pouches" },
   { src: "assets/img/products/pouches/cosmetic-pouch-sage-green.webp", label: "Cosmetic Pouch — Sage Green", cat: "Pouches" },

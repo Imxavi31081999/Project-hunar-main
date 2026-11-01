@@ -41,7 +41,8 @@
     catalogueItems.length = 0;
     sorted.forEach(card => {
       const hay = card.dataset.name + ' ' + card.dataset.cat.toLowerCase();
-      const match = (activeCat === 'All' || card.dataset.cat === activeCat) && (!q || hay.includes(q));
+      const inCat = activeCat === 'All' || (activeCat === 'Latest Arrivals' ? card.dataset.new === '1' : card.dataset.cat === activeCat);
+      const match = inCat && (!q || hay.includes(q));
       if (match) {
         card.dataset.idx = catalogueItems.length;
         catalogueItems.push(bySrc.get(card.dataset.src));
