@@ -77,11 +77,10 @@ def main():
         wa = 'https://wa.me/917982799527?text=' + urllib.parse.quote('Hi Project Hunar, I would like to enquire about: %s' % it['label'])
         cards.append(
             '      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="0" data-order="%d" data-cat="%s" data-src="%s" data-name="%s">\n'
-            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"><span class="cat-badge">Made to order</span></div>\n'
+            '        <div class="cat-card-media"><img src="%s" alt="%s" loading="lazy" decoding="async" width="600" height="750"></div>\n'
             '        <div class="cat-card-body">\n'
             '          <span class="cat-card-cat">%s</span>\n'
             '          <h2 class="cat-card-title">%s</h2>\n'
-            '          <span class="cat-card-meta">Min. order 25 pcs · Customisable</span>\n'
             '          <a class="cat-enquire" href="%s" target="_blank" rel="noopener">Enquire on WhatsApp</a>\n'
             '        </div>\n'
             '      </article>' % (n, esc(it['cat']), esc(it['src']), esc(it['label'].lower()), esc(it['src']), esc(alt), esc(it['cat']), esc(it['label']), esc(wa)))
@@ -116,7 +115,7 @@ def main():
                                 'category': it['cat'],
                                 'image': SITE + '/' + it['src'],
                                 'brand': {'@type': 'Brand', 'name': 'Project Hunar'},
-                                'description': '%s. Handmade by women artisans at Project Hunar (Anubhav NGO). Made to order, minimum 25 pieces.' % it['label'],
+                                'description': '%s. Handmade by women artisans at Project Hunar (Anubhav NGO). Handmade by women artisans. Enquire for details.' % it['label'],
                             },
                         }
                         for n, it in enumerate(items)
