@@ -921,6 +921,44 @@
     .showcase-row.fast{animation-duration:34s;}
   }
 
+
+  /* ============ CATALOGUE - filterable listing of every product ============ */
+  .catalogue-head{max-width:760px;margin:0 auto clamp(2rem,4vw,3rem);text-align:center;}
+  .catalogue-head .eyebrow{justify-content:center;}
+  .catalogue-head h2{margin:0 auto 1rem;max-width:none;font-weight:500;}
+  .catalogue-head p{margin:0 auto;max-width:56ch;}
+  .cat-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem;margin-bottom:.8rem;}
+  .cat-chip{
+    font:600 .78rem 'Outfit',sans-serif;letter-spacing:.06em;text-transform:uppercase;
+    padding:.6rem 1.05rem;border-radius:999px;cursor:pointer;
+    background:transparent;color:var(--ink);border:1px solid var(--line-light);
+    transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease);
+  }
+  .cat-chip span{opacity:.55;margin-left:.35rem;font-weight:500;}
+  .cat-chip:hover{border-color:var(--clay);color:var(--clay);}
+  .cat-chip.active{background:var(--ink);color:var(--cream);border-color:var(--ink);}
+  .cat-chip.active:hover{color:var(--cream);}
+  .cat-count{text-align:center;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.55;font-weight:600;margin-bottom:1.8rem;}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem;}
+  .cat-card{
+    background:#fff;border:1px solid var(--line-light);border-radius:1rem;overflow:hidden;cursor:pointer;
+    display:flex;flex-direction:column;
+    transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease);
+  }
+  .cat-card:hover{transform:translateY(-6px);border-color:var(--clay);box-shadow:0 22px 44px -22px rgba(11,10,8,.35);}
+  .cat-card-media{aspect-ratio:4/5;overflow:hidden;background:var(--paper-dim);}
+  .cat-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);}
+  .cat-card:hover .cat-card-media img{transform:scale(1.06);}
+  .cat-card-body{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.3rem;}
+  .cat-card-cat{font-size:.66rem;text-transform:uppercase;letter-spacing:.2em;color:var(--clay);font-weight:700;}
+  .cat-card h4{font-size:1rem;font-weight:600;line-height:1.25;}
+  .cat-card-meta{font-size:.78rem;opacity:.6;}
+  @media (max-width:640px){
+    .cat-grid{grid-template-columns:repeat(2,1fr);gap:.7rem;}
+    .cat-card h4{font-size:.88rem;}
+    .cat-card-body{padding:.7rem .75rem .9rem;}
+  }
+
   /* ============ PIXEL CURSOR TRAIL (scoped to parallax break) ============ */
   .pixel-trail-canvas{
     position:absolute;inset:0;z-index:3;pointer-events:none;
@@ -1041,6 +1079,7 @@ src="https://www.facebook.com/tr?id=1545765707317389&ev=PageView&noscript=1"
     <a href="#craft">Craft</a>
     <a href="#madhubani">Madhubani</a>
     <a href="#handmade">Handmade</a>
+    <a href="#catalogue">Catalogue</a>
     <a href="#partner">Partner</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -1349,6 +1388,21 @@ src="https://www.facebook.com/tr?id=1545765707317389&ev=PageView&noscript=1"
   </div>
 </section>
 
+<!-- ============ CATALOGUE - full product listing ============ -->
+<section class="light" id="catalogue">
+  <div class="grid-overlay"></div>
+  <div class="wrap">
+    <div class="catalogue-head reveal">
+      <p class="eyebrow">The Catalogue</p>
+      <h2 class="headline">Browse every product, by category.</h2>
+      <p class="body-text">Madhubani art, quilted pouches and bags, crochet and handstitched pieces, all handmade by our artisans. Tap any product to see it larger and send an enquiry. Custom orders from 25 pieces.</p>
+    </div>
+    <div class="cat-filters" id="catFilters" role="group" aria-label="Filter products by category"></div>
+    <p class="cat-count" id="catCount"></p>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
 <!-- ============ CONTACT ============ -->
 <section class="light" id="contact">
   <div class="grid-overlay"></div>
@@ -1644,6 +1698,11 @@ const madhubaniItems = [
 ];
 
 const handmadeItems = [
+  { src: "Images/crochet/crochet-tote-sunflower-granny-square.jpeg",       label: "Crochet Tote — Sunflower Granny Square" },
+  { src: "Images/crochet/crochet-tote-sunflower-strawberry-charm.jpeg",    label: "Crochet Tote — Sunflower with Strawberry Charm" },
+  { src: "Images/crochet/crochet-tote-red-sunflower.jpeg",                 label: "Crochet Tote — Red Sunflower" },
+  { src: "Images/crochet/crochet-hobo-cream-red-roses.jpeg",               label: "Crochet Hobo Bag — Cream with Red Roses" },
+  { src: "Images/crochet/crochet-hobo-beige-pink-roses.jpeg",              label: "Crochet Hobo Bag — Beige with Pink Roses" },
   { src: "Images/Hand creafted/Quilted Peach Pink Floral Cosmetic Pouch.png",    label: "Cosmetic Pouch — Peach Floral" },
   { src: "Images/Hand creafted/Quilted Blue Elephants Print Cosmetic Pouch.png", label: "Cosmetic Pouch — Blue Elephant" },
   { src: "Images/Hand creafted/Quilted sage green floral cosmetic pouch.png",    label: "Cosmetic Pouch — Sage Green" },
@@ -1671,6 +1730,22 @@ const handmadeItems = [
 
 // Combined product list for the showcase banner + lightbox
 const showcaseItems = [...madhubaniItems, ...handmadeItems, ];
+
+// Category for each product (used by the Catalogue filters)
+function categoryOf(it) {
+  const l = it.label.toLowerCase();
+  if (it.src.includes('Moubani')) return 'Madhubani Art';
+  if (l.startsWith('crochet tote') || l.startsWith('crochet hobo')) return 'Crochet Bags';
+  if (l.includes('crochet') || l.includes('elephant toy')) return 'Crochet';
+  if (l.includes('laptop bag') || l.includes('tote bag')) return 'Bags';
+  if (l.includes('pouch')) return 'Pouches';
+  if (l.includes('cushion')) return 'Home & Cushions';
+  if (l.includes('jacket')) return 'Garments';
+  return 'Accessories';
+}
+showcaseItems.forEach(it => { it.cat = categoryOf(it); });
+
+const catalogueItems = [];   // current filtered list (lightbox walks this)
 
 function buildSlides(items, collection) {
   return items.map((it, i) => `
@@ -1786,8 +1861,8 @@ function whenSwiperReady(cb) {
    clones) plus a delegation fallback. Close/nav bound directly
    to their buttons. ESC + arrow keys.
    ============================================================ */
-const collectionMap = { madhubani: madhubaniItems, handmade: handmadeItems, showcase: showcaseItems };
-const collectionLabel = { madhubani: 'Madhubani Collection', handmade: 'Quilted & Handmade Collection', showcase: 'The Full Range' };
+const collectionMap = { madhubani: madhubaniItems, handmade: handmadeItems, showcase: showcaseItems, catalogue: catalogueItems };
+const collectionLabel = { madhubani: 'Madhubani Collection', handmade: 'Quilted & Handmade Collection', showcase: 'The Full Range', catalogue: 'Catalogue' };
 
 const lightbox      = document.getElementById('lightbox');
 const lbImage       = document.getElementById('lbImage');
@@ -1860,6 +1935,50 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowRight') lbStep(1);
   else if (e.key === 'ArrowLeft')  lbStep(-1);
 });
+
+/* ============================================================
+   6b. CATALOGUE - category filters + product grid
+   ============================================================ */
+(function buildCatalogue() {
+  const filtersEl = document.getElementById('catFilters');
+  const gridEl = document.getElementById('catGrid');
+  const countEl = document.getElementById('catCount');
+  if (!filtersEl || !gridEl) return;
+  const order = ['Crochet Bags', 'Crochet', 'Bags', 'Pouches', 'Madhubani Art', 'Home & Cushions', 'Garments', 'Accessories'];
+  const present = order.filter(c => showcaseItems.some(it => it.cat === c));
+  const cats = ['All', ...present];
+  let active = 'All';
+
+  function render() {
+    const list = active === 'All' ? showcaseItems : showcaseItems.filter(it => it.cat === active);
+    catalogueItems.length = 0;
+    list.forEach(it => catalogueItems.push(it));
+    gridEl.innerHTML = catalogueItems.map((it, i) => `
+      <article class="cat-card" data-lb-open data-collection="catalogue" data-idx="${i}">
+        <div class="cat-card-media"><img src="${it.src}" alt="${it.label}" loading="lazy"></div>
+        <div class="cat-card-body">
+          <span class="cat-card-cat">${it.cat}</span>
+          <h4>${it.label}</h4>
+          <span class="cat-card-meta">Made to order · Min. 25 pcs</span>
+        </div>
+      </article>`).join('');
+    countEl.textContent = `${catalogueItems.length} product${catalogueItems.length === 1 ? '' : 's'}`;
+    filtersEl.querySelectorAll('.cat-chip').forEach(b => b.classList.toggle('active', b.dataset.cat === active));
+    bindLightboxCards();
+  }
+
+  filtersEl.innerHTML = cats.map(c => {
+    const n = c === 'All' ? showcaseItems.length : showcaseItems.filter(it => it.cat === c).length;
+    return `<button type="button" class="cat-chip" data-cat="${c}">${c}<span>${n}</span></button>`;
+  }).join('');
+  filtersEl.addEventListener('click', e => {
+    const b = e.target.closest('.cat-chip');
+    if (!b) return;
+    active = b.dataset.cat;
+    render();
+  });
+  render();
+})();
 
 bindLightboxCards();
 whenSwiperReady(() => {
