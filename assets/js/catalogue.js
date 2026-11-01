@@ -24,6 +24,9 @@
   const backdrop = document.getElementById('sideBackdrop');
   const bySrc = new Map(showcaseItems.map(it => [it.src, it]));
   const slugOf = c => c.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const moreBtn = document.getElementById('viewMore');
+  const PAGE = 12;
+  let shown = PAGE;
   let activeCat = 'All';
 
   function render() {
@@ -38,12 +41,12 @@
     catalogueItems.length = 0;
     sorted.forEach(card => {
       const hay = card.dataset.name + ' ' + card.dataset.cat.toLowerCase();
-      const show = (activeCat === 'All' || card.dataset.cat === activeCat) && (!q || hay.includes(q));
-      card.hidden = !show;
-      if (show) {
+      const match = (activeCat === 'All' || card.dataset.cat === activeCat) && (!q || hay.includes(q));
+      if (match) {
         card.dataset.idx = catalogueItems.length;
         catalogueItems.push(bySrc.get(card.dataset.src));
       }
+      card.hidden = !match || catalogueItems.length > shown;
     });
     chips.forEach(ch => {
       const on = ch.dataset.cat === activeCat;
@@ -51,7 +54,10 @@
       ch.setAttribute('aria-pressed', on);
     });
     const n = catalogueItems.length;
-    countEl.textContent = n + (n === 1 ? ' product' : ' products');
+    const showing = Math.min(n, shown);
+    countEl.textContent = n > showing ? 'Showing ' + showing + ' of ' + n + ' products' : n + (n === 1 ? ' product' : ' products');
+    moreBtn.hidden = n <= shown;
+    moreBtn.textContent = 'View more (' + (n - shown) + ' remaining)';
     emptyEl.hidden = n > 0;
   }
 
@@ -62,14 +68,16 @@
 
   chips.forEach(ch => ch.addEventListener('click', () => {
     activeCat = ch.dataset.cat;
+    shown = PAGE;
     render();
     const h = activeCat === 'All' ? location.pathname + location.search : '#' + slugOf(activeCat);
     history.replaceState(null, '', h);
     setSidebar(false);
     if (window.innerWidth <= 900) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }));
-  searchEl.addEventListener('input', render);
-  sortEl.addEventListener('change', render);
+  searchEl.addEventListener('input', () => { shown = PAGE; render(); });
+  sortEl.addEventListener('change', () => { shown = PAGE; render(); });
+  moreBtn.addEventListener('click', () => { shown += PAGE; render(); });
   document.getElementById('filterBtn').addEventListener('click', () => setSidebar(true));
   document.getElementById('sideClose').addEventListener('click', () => setSidebar(false));
   backdrop.addEventListener('click', () => setSidebar(false));

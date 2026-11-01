@@ -1020,4 +1020,17 @@
     .shop-sort span{display:none;}
     .shop .cat-grid{grid-template-columns:repeat(2,1fr);}
   }
-  #catalogue .wrap{max-width:1360px;}
+  
+  /* catalogue uses 90% of the viewport width, bigger cards, view-more */
+  #catalogue .wrap{max-width:none;width:90vw;margin-left:auto;margin-right:auto;}
+  .shop{grid-template-columns:290px 1fr;}
+  .shop .cat-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.4rem;}
+  .shop .cat-card-title{font-size:1.1rem;}
+  .shop-more{display:flex;justify-content:center;margin-top:2.2rem;}
+  .shop-more[hidden]{display:none;}
+  @media (max-width:900px){
+    .shop{grid-template-columns:1fr;}
+    #catalogue .wrap{width:92vw;}
+    .shop .cat-grid{grid-template-columns:repeat(2,1fr);gap:.8rem;}
+  }
+  .shop-more .btn[hidden]{display:none;}
