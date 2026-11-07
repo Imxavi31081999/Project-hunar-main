@@ -56,4 +56,8 @@
     <image:image><image:loc>https://projecthunar.in/assets/img/products/pouches/cosmetic-pouch-peach-orange-grid.webp</image:loc><image:title>Cosmetic Pouch — Peach Orange Grid</image:title></image:image>
     <image:image><image:loc>https://projecthunar.in/assets/img/products/pouches/cosmetic-pouch-pink-floral.webp</image:loc><image:title>Cosmetic Pouch — Pink Floral</image:title></image:image>
   </url>
+  <url>
+    <loc>https://projecthunar.in/enquiry.html</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
