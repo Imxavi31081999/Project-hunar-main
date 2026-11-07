@@ -1,20 +1,27 @@
 /**
  * Project Hunar lead handler (Google Apps Script), bound to the "Hunar Leads" sheet.
  *
- * SETUP: run setup() once (it creates the headers, the Status dropdown and the two Drive
- * folders), then Deploy > New deployment > Web app (Execute as: Me, Access: Anyone) and
- * paste the web-app URL into ENDPOINT in assets/js/enquiry.js.
- * Put the product photos you want emailed to clients into the Drive folder "Hunar Product Photos".
+ * SETUP: run setup() once (creates headers, Status dropdown and the two Drive folders),
+ * then Deploy > New deployment > Web app (Execute as: Me, Access: Anyone) and paste the
+ * web-app URL into ENDPOINT in assets/js/enquiry.js.
+ * Put product photos for the client email into the Drive folder "Hunar Product Photos".
+ * After editing this script: Deploy > Manage deployments > Edit > New version.
  */
 var TEAM_EMAIL = 'anubhavedungo@gmail.com';
 var LOGO_URL   = 'https://anubhavngo.in/wp-content/uploads/2025/07/Group-5-scaled.png';
 var SITE_URL   = 'https://projecthunar.in/';
+var PHONE      = '+91 79827 99527';
+var INSTAGRAM  = 'https://www.instagram.com/anubhav.ngo';
 var PRODUCT_FOLDER = 'Hunar Product Photos';
 var UPLOAD_FOLDER  = 'Hunar Enquiry Uploads';
 var MAX_ATTACHMENTS = 5;
 var MAX_BYTES = 15 * 1024 * 1024;
 var STATUSES = ['New', 'Called', 'Quoted', 'Won', 'Lost'];
 var HEADERS = ['Time', 'Name', 'City', 'Mobile', 'Email', 'Fabric source', 'Fabric material', 'Timeline', 'Status', 'Client mailed', 'Photos', 'Page'];
+
+// Brand colours for emails
+var C = { clay: '#c1552a', ink: '#1c1a16', muted: '#6b665b', paper: '#f4efe4', line: '#e6dfcf', indigo: '#33456e' };
+var FONT = "font-family:Arial,Helvetica,sans-serif;";
 
 function folder_(name) {
   var it = DriveApp.getFoldersByName(name);
@@ -34,28 +41,22 @@ function setup() {
     return SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo(s).setBackground(colors[s]).setRanges([range]).build();
   }));
   sh.setColumnWidths(1, HEADERS.length, 130);
-  // Authorise mail permission now so the first real lead does not fail.
   MailApp.getRemainingDailyQuota();
 }
 
 function doPost(e) {
   var d = JSON.parse(e.postData.contents);
-  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Leads') || SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-  var photos = [saveUploads_(d), d.photo_link || ''].filter(String).join(' | ');
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Leads') || ss.getSheets()[0];
+  var uploadUrl = saveUploads_(d);
+  var photos = [uploadUrl, d.photo_link || ''].filter(String).join(' | ');
   var mailed = 'No (no email given)';
   if (d.email) {
     try { sendClientMail_(d); mailed = 'Yes'; } catch (err) { mailed = 'Failed: ' + err.message; }
   }
   sh.appendRow([new Date(d.time), d.name, d.city, "'" + d.mobile, d.email || '', d.fabric_source,
                 d.fabric_material, d.timeline, 'New', mailed, photos, d.page]);
-  MailApp.sendEmail({
-    to: TEAM_EMAIL, name: 'Project Hunar website',
-    subject: 'New Hunar lead: ' + d.name + ' (' + d.city + ')',
-    body: 'Name: ' + d.name + '\nCity: ' + d.city + '\nMobile: ' + d.mobile + '\nEmail: ' + (d.email || '-') +
-          '\nFabric: ' + d.fabric_source + ' ' + (d.fabric_material || '') + '\nTimeline: ' + d.timeline +
-          '\nPhotos: ' + (photos || '-') + '\nClient mailed: ' + mailed +
-          '\n\nSheet: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl()
-  });
+  try { sendTeamMail_(d, uploadUrl, mailed, ss.getUrl()); } catch (err2) {}
   return ContentService.createTextOutput('ok');
 }
 
@@ -68,10 +69,52 @@ function saveUploads_(d) {
   return dir.getUrl();
 }
 
+/* ---------- email helpers ---------- */
 function esc_(s) {
-  return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
 }
 
+function row_(label, value) {
+  if (!value) return '';
+  return '<tr><td style="' + FONT + 'padding:9px 0;width:38%;font-size:13px;color:' + C.muted + ';border-bottom:1px solid ' + C.line + ';vertical-align:top">' + label + '</td>' +
+         '<td style="' + FONT + 'padding:9px 0;font-size:14px;color:' + C.ink + ';font-weight:bold;border-bottom:1px solid ' + C.line + ';vertical-align:top">' + value + '</td></tr>';
+}
+
+function btn_(href, text, primary) {
+  var bg = primary ? C.clay : '#ffffff', fg = primary ? '#ffffff' : C.clay;
+  return '<a href="' + href + '" style="' + FONT + 'display:inline-block;margin:0 8px 8px 0;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:bold;text-decoration:none;background:' + bg + ';color:' + fg + ';border:2px solid ' + C.clay + '">' + text + '</a>';
+}
+
+function shell_(preheader, inner) {
+  return '<!DOCTYPE html><html><body style="margin:0;padding:0;background:' + C.paper + '">' +
+    '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:' + C.paper + '">' + esc_(preheader) + '</div>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + C.paper + ';padding:24px 12px"><tr><td align="center">' +
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid ' + C.line + '">' +
+    '<tr><td style="padding:22px 32px;border-bottom:4px solid ' + C.clay + '"><img src="' + LOGO_URL + '" alt="Anubhav NGO" height="42" style="display:block;height:42px;width:auto;border:0"></td></tr>' +
+    inner +
+    '<tr><td style="' + FONT + 'padding:22px 32px;background:' + C.ink + ';color:#cfc8b8;font-size:12px;line-height:1.7">' +
+    '<b style="color:#ffffff;font-size:14px">Project Hunar</b><br>An initiative by Anubhav NGO, handmade by women artisans<br>' +
+    '<a href="' + SITE_URL + '" style="color:#e0774a;text-decoration:none">projecthunar.in</a> &nbsp;|&nbsp; ' + PHONE + ' &nbsp;|&nbsp; ' +
+    '<a href="' + INSTAGRAM + '" style="color:#e0774a;text-decoration:none">@anubhav.ngo</a><br>' +
+    'A-128/1, 2nd Floor, Mohammad Pur, Near Bhikaji Cama Place, New Delhi 66</td></tr>' +
+    '</table></td></tr></table></body></html>';
+}
+
+function step_(n, title, text) {
+  return '<tr><td style="vertical-align:top;width:34px;padding:0 0 14px"><div style="' + FONT + 'width:26px;height:26px;border-radius:13px;background:' + C.clay + ';color:#ffffff;font-size:13px;font-weight:bold;text-align:center;line-height:26px">' + n + '</div></td>' +
+         '<td style="' + FONT + 'padding:0 0 14px;font-size:14px;line-height:1.5;color:' + C.ink + '"><b>' + title + '</b><br><span style="color:' + C.muted + '">' + text + '</span></td></tr>';
+}
+
+function linksHtml_(d, uploadUrl) {
+  var parts = [];
+  if (uploadUrl) parts.push('<a href="' + uploadUrl + '" style="color:' + C.clay + '">Uploaded photos</a>');
+  String(d.photo_link || '').split(' | ').filter(String).forEach(function (u, i) {
+    parts.push('<a href="' + esc_(u) + '" style="color:' + C.clay + '">Link ' + (i + 1) + '</a>');
+  });
+  return parts.join(' &nbsp;&middot;&nbsp; ');
+}
+
+/* ---------- client email ---------- */
 function sendClientMail_(d) {
   var files = folder_(PRODUCT_FOLDER).getFiles(), attach = [], total = 0;
   while (files.hasNext() && attach.length < MAX_ATTACHMENTS) {
@@ -80,25 +123,72 @@ function sendClientMail_(d) {
     total += f.getSize();
     attach.push(f.getBlob());
   }
-  var html =
-    '<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#1c1a16;line-height:1.55">' +
-    '<div style="padding:18px 0;border-bottom:3px solid #c1552a"><img src="' + LOGO_URL + '" alt="Anubhav NGO" height="44" style="height:44px;width:auto"></div>' +
-    '<h2 style="margin:22px 0 8px">Thank you, ' + esc_(d.name) + '!</h2>' +
-    '<p>We have received your enquiry. Our team will call you on <b>' + esc_(d.mobile) + '</b> shortly.</p>' +
-    '<table style="border-collapse:collapse;width:100%;font-size:14px;margin:14px 0">' +
-    '<tr><td style="padding:6px 0;color:#6b665b">City</td><td>' + esc_(d.city) + '</td></tr>' +
-    '<tr><td style="padding:6px 0;color:#6b665b">Fabric</td><td>' + esc_(d.fabric_source) + (d.fabric_material ? ' (' + esc_(d.fabric_material) + ')' : '') + '</td></tr>' +
-    '<tr><td style="padding:6px 0;color:#6b665b">Timeline</td><td>' + esc_(d.timeline) + '</td></tr></table>' +
-    '<p><b>What to expect</b></p><ul style="padding-left:18px">' +
-    '<li>Minimum order: 25 pieces per product</li>' +
-    '<li>Bulk price, sampling cost and measurements will be shared on the call</li></ul>' +
-    '<p>' + (attach.length ? 'A few pieces of our work are attached. ' : '') + 'See the full range at <a href="' + SITE_URL + 'catalogue.html" style="color:#c1552a">projecthunar.in</a>.</p>' +
-    '<p style="margin-top:24px">Warm regards,<br><b>Project Hunar</b><br>An initiative by Anubhav NGO<br>' +
-    '<a href="' + SITE_URL + '" style="color:#c1552a">projecthunar.in</a> &middot; +91 79827 99527</p></div>';
+  var fabric = esc_(d.fabric_source) + (d.fabric_material ? ' (' + esc_(d.fabric_material) + ')' : '');
+  var inner =
+    '<tr><td style="' + FONT + 'padding:30px 32px 6px">' +
+      '<div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:' + C.clay + ';font-weight:bold">Enquiry received</div>' +
+      '<h1 style="margin:8px 0 10px;font-size:26px;line-height:1.25;color:' + C.ink + '">Thank you, ' + esc_(d.name) + '!</h1>' +
+      '<p style="margin:0;font-size:15px;line-height:1.6;color:' + C.muted + '">We have received your enquiry. Our team will call you on <b style="color:' + C.ink + '">' + esc_(d.mobile) + '</b> shortly.</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:20px 32px 6px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + C.paper + ';border-radius:10px"><tr><td style="padding:6px 20px 12px">' +
+      '<div style="' + FONT + 'padding:12px 0 2px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:' + C.muted + ';font-weight:bold">Your enquiry</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
+        row_('City', esc_(d.city)) + row_('Mobile', esc_(d.mobile)) + row_('Fabric', fabric) + row_('Timeline', esc_(d.timeline)) +
+        row_('Reference photos', linksHtml_(d, d.files && d.files.length ? 'x' : '') ? 'Received' : '') +
+      '</table></td></tr></table></td></tr>' +
+    '<tr><td style="padding:22px 32px 4px"><div style="' + FONT + 'margin-bottom:14px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:' + C.muted + ';font-weight:bold">What happens next</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
+        step_(1, 'We call you', 'A team member phones you to understand your requirement.') +
+        step_(2, 'You get the numbers', 'Bulk price, sampling cost and measurements. Minimum order is 25 pieces per product.') +
+        step_(3, 'Sample, then production', 'Once you approve the sample, our artisans begin your order.') +
+      '</table></td></tr>' +
+    '<tr><td style="' + FONT + 'padding:8px 32px 30px">' +
+      (attach.length ? '<p style="margin:0 0 16px;font-size:14px;color:' + C.muted + '">A few pieces of our work are attached to this email.</p>' : '') +
+      btn_(SITE_URL + 'catalogue.html', 'View our catalogue', true) + btn_(SITE_URL, 'Visit projecthunar.in', false) +
+    '</td></tr>';
   MailApp.sendEmail({
     to: d.email, replyTo: TEAM_EMAIL, name: 'Project Hunar by Anubhav NGO',
     subject: 'Thank you for your enquiry - Project Hunar',
-    htmlBody: html, body: 'Thank you for your enquiry. Our team will call you shortly. ' + SITE_URL,
+    htmlBody: shell_('We received your enquiry. Our team will call you shortly.', inner),
+    body: 'Hello ' + d.name + ', thank you for your enquiry. Our team will call you on ' + d.mobile + ' shortly. ' + SITE_URL,
     attachments: attach
   });
+}
+
+/* ---------- team alert ---------- */
+function sendTeamMail_(d, uploadUrl, mailed, sheetUrl) {
+  var wa = 'https://wa.me/91' + String(d.mobile).replace(/\D/g, '');
+  var links = linksHtml_(d, uploadUrl);
+  var inner =
+    '<tr><td style="' + FONT + 'padding:26px 32px 4px">' +
+      '<div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:' + C.clay + ';font-weight:bold">New website lead</div>' +
+      '<h1 style="margin:8px 0 4px;font-size:24px;color:' + C.ink + '">' + esc_(d.name) + ', ' + esc_(d.city) + '</h1>' +
+      '<p style="margin:0;font-size:14px;color:' + C.muted + '">Call within the day for the best chance of converting.</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:14px 32px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
+      row_('Mobile', '<a href="tel:' + esc_(d.mobile) + '" style="color:' + C.clay + ';text-decoration:none">' + esc_(d.mobile) + '</a>') +
+      row_('Email', d.email ? '<a href="mailto:' + esc_(d.email) + '" style="color:' + C.clay + ';text-decoration:none">' + esc_(d.email) + '</a>' : '') +
+      row_('City', esc_(d.city)) +
+      row_('Fabric', esc_(d.fabric_source)) +
+      row_('Fabric material', esc_(d.fabric_material)) +
+      row_('Timeline', esc_(d.timeline)) +
+      row_('Reference photos', links) +
+      row_('Client email sent', esc_(mailed)) +
+      row_('Came from', '<a href="' + esc_(d.page) + '" style="color:' + C.clay + ';text-decoration:none">' + esc_(d.page) + '</a>') +
+    '</table></td></tr>' +
+    '<tr><td style="' + FONT + 'padding:18px 32px 28px">' +
+      btn_('tel:' + esc_(d.mobile), 'Call now', true) + btn_(wa, 'WhatsApp', false) + btn_(sheetUrl, 'Open sheet', false) +
+    '</td></tr>';
+  MailApp.sendEmail({
+    to: TEAM_EMAIL, name: 'Project Hunar website',
+    subject: 'New Hunar lead: ' + d.name + ' (' + d.city + ')',
+    htmlBody: shell_('New lead from ' + d.name + ' in ' + d.city + '. Mobile ' + d.mobile, inner),
+    body: 'New lead: ' + d.name + ', ' + d.city + '. Mobile: ' + d.mobile + '. Email: ' + (d.email || '-') +
+          '. Fabric: ' + d.fabric_source + ' ' + (d.fabric_material || '') + '. Timeline: ' + d.timeline + '. Sheet: ' + sheetUrl
+  });
+}
+
+/** Run once: gives the team Gmail view-only access to both Drive folders (product photos + customer uploads). */
+function shareFolders() {
+  [folder_(PRODUCT_FOLDER), folder_(UPLOAD_FOLDER)].forEach(function (f) { f.addViewer(TEAM_EMAIL); });
 }
