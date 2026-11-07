@@ -18,7 +18,8 @@
     '<li><strong>Minimum order: 25 pieces</strong>Per product.</li>' +
     '<li><strong>Bulk price</strong>Quoted by us once we know your requirement.</li>' +
     '<li><strong>Sampling</strong>Sample available; cost shared by our team.</li>' +
-    '<li><strong>Measurements &amp; product photos</strong>Provided by us.</li></ul></div>' +
+    // '<li><strong>Measurements &amp; product photos</strong>Provided by us.</li>' +
+    '</ul></div>' +
     '<form class="enq-form" novalidate>' +
     '<label>Your name<input name="name" required autocomplete="name"></label>' +
     '<div class="enq-row"><label>City<input name="city" required autocomplete="address-level2"></label>' +
@@ -71,20 +72,60 @@
       files.forEach(function (f) { var i = document.createElement('img'); i.alt = ''; i.src = URL.createObjectURL(f); thumbs.appendChild(i); });
     });
 
+    function normMobile(v) { return String(v || '').replace(/[\s+\-]/g, '').replace(/^91(?=\d{10}$)/, ''); }
+    function splitLinks(v) { return String(v || '').split(/[\s,;]+/).filter(Boolean); }
+    var rules = {
+      name: function (v) { return v.trim() ? '' : 'Please enter your name.'; },
+      city: function (v) { return v.trim() ? '' : 'Please enter your city.'; },
+      mobile: function (v) { return /^[6-9]\d{9}$/.test(normMobile(v)) ? '' : 'Enter a valid 10-digit mobile number (starts with 6, 7, 8 or 9).'; },
+      email: function (v) { return !v.trim() || /^\S+@\S+\.\S+$/.test(v.trim()) ? '' : 'Please check your email address.'; },
+      fabric_source: function (v) { return v ? '' : 'Please choose an option.'; },
+      timeline: function (v) { return v ? '' : 'Please choose a timeline.'; },
+      photo_link: function (v) {
+        var l = splitLinks(v);
+        if (l.length > 6) return 'Please add up to 6 links.';
+        var bad = l.filter(function (u) { return !/^https?:\/\/\S+\.\S+/i.test(u); })[0];
+        return bad ? 'Each link must start with https:// (check: ' + bad.slice(0, 40) + ')' : '';
+      }
+    };
+    var errEls = {};
+    Object.keys(rules).forEach(function (n) {
+      var f = form.elements[n], span = document.createElement('span');
+      span.className = 'enq-err'; span.id = 'enqerr-' + n + '-' + Math.random().toString(36).slice(2, 7);
+      span.setAttribute('role', 'alert'); f.parentNode.appendChild(span);
+      f.setAttribute('aria-describedby', span.id);
+      if (f.required) f.setAttribute('aria-required', 'true');
+      errEls[n] = span;
+    });
+    function check(n) {
+      var f = form.elements[n], m = rules[n](f.value);
+      errEls[n].textContent = m;
+      if (m) f.setAttribute('aria-invalid', 'true'); else f.removeAttribute('aria-invalid');
+      f.classList.toggle('is-valid', !m && !!f.value.trim());
+      return m;
+    }
+    Object.keys(rules).forEach(function (n) {
+      var f = form.elements[n];
+      f.addEventListener('blur', function () { check(n); });
+      f.addEventListener('input', function () { if (f.getAttribute('aria-invalid')) check(n); });
+      f.addEventListener('change', function () { check(n); });
+    });
+    form.mobile.addEventListener('input', function () {
+      var p = form.mobile.value.replace(/[^\d+\s\-]/g, '');
+      if (p !== form.mobile.value) form.mobile.value = p;
+    });
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var d = new FormData(form);
       if (d.get('website')) return;
-      var mobile = String(d.get('mobile') || '').replace(/[\s+\-]/g, '').replace(/^91(?=\d{10}$)/, '');
+      var firstBad = null;
+      Object.keys(rules).forEach(function (n) { if (check(n) && !firstBad) firstBad = n; });
+      if (firstBad) { say('Please fix the highlighted fields.', false); form.elements[firstBad].focus(); return; }
+      say('', true);
+      var mobile = normMobile(d.get('mobile'));
       var email = String(d.get('email') || '').trim();
-      if (!String(d.get('name')).trim() || !String(d.get('city')).trim() || !d.get('fabric_source') || !d.get('timeline')) { say('Please fill in all the required fields.', false); return; }
-      if (!/^[6-9]\d{9}$/.test(mobile)) { say('Please enter a valid 10-digit mobile number.', false); form.mobile.focus(); return; }
-      if (email && !/^\S+@\S+\.\S+$/.test(email)) { say('Please check your email address.', false); form.email.focus(); return; }
-      var links = String(d.get('photo_link') || '').split(/[\s,;]+/).filter(Boolean);
-      var badLink = links.filter(function (u) { return !/^https?:\/\/\S+\.\S+/i.test(u); })[0];
-      if (badLink) { say('Each link must start with https:// (check: ' + badLink.slice(0, 40) + ')', false); form.photo_link.focus(); return; }
-      if (links.length > 6) { say('Please add up to 6 links.', false); form.photo_link.focus(); return; }
-      var link = links.join(' | ');
+      var link = splitLinks(d.get('photo_link')).join(' | ');
       var data = {
         photo_link: link,
         name: String(d.get('name')).trim(), city: String(d.get('city')).trim(), mobile: mobile, email: email,
@@ -107,6 +148,7 @@
         return fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(data) });
       }).then(function () {
         form.reset(); thumbs.innerHTML = '';
+        Object.keys(errEls).forEach(function (n) { errEls[n].textContent = ''; form.elements[n].removeAttribute('aria-invalid'); form.elements[n].classList.remove('is-valid'); });
         say('', true);
         root.querySelector('.enq-grid').hidden = true;
         root.querySelector('.enq-thanks').hidden = false;
@@ -123,29 +165,10 @@
     var inline = document.getElementById('enquiryMount');
     if (inline) { inline.innerHTML = FORM; wire(inline); }
 
-    var modal = document.createElement('div');
-    modal.className = 'enq-modal'; modal.hidden = true;
-    modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); modal.setAttribute('aria-labelledby', 'enqTitle');
-    modal.innerHTML = '<div class="enq-backdrop" data-close></div><div class="enq-dialog">' +
-      '<button type="button" class="enq-close" data-close aria-label="Close">&times;</button>' +
-      '<p class="eyebrow">Bulk &amp; Custom Orders</p><h2 id="enqTitle">Tell us a little. We will call you.</h2>' +
-      '<div class="enq-body">' + FORM + '</div></div>';
-    document.body.appendChild(modal);
-    wire(modal);
-
-    var last;
-    function open() { last = document.activeElement; modal.hidden = false; document.documentElement.classList.add('enq-lock'); modal.querySelector('input').focus(); }
-    function close() { modal.hidden = true; document.documentElement.classList.remove('enq-lock'); if (last && last.focus) last.focus(); }
-    modal.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
-    document.addEventListener('click', function (e) {
-      var t = e.target.closest('[data-enquiry]');
-      if (t) { e.preventDefault(); open(); }
-    });
-
+    // Enquiry opens the separate page (enquiry.html), no popup.
     if (!inline) {
-      var fab = document.createElement('button');
-      fab.type = 'button'; fab.className = 'enq-fab'; fab.setAttribute('data-enquiry', '');
+      var fab = document.createElement('a');
+      fab.href = 'enquiry.html'; fab.className = 'enq-fab';
       fab.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><path d="M4 5h16v11H8l-4 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Enquiry</span>';
       document.body.appendChild(fab);
     }

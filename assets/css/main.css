@@ -1078,7 +1078,22 @@
   .enq-hp{position:absolute;left:-9999px;}
   .enq-form button{justify-self:start;cursor:pointer;border:0;}
   .enq-msg{font-size:.9rem;min-height:1.2em;margin:0;}.enq-msg.ok{color:#2e6b3a;}.enq-msg.err{color:#b3261e;}
-  .enq-page .enq-card{max-width:960px;margin:0 auto;border-radius:1.4rem;border:1px solid var(--line-light);padding:clamp(1.6rem,5vw,3.2rem);background:rgba(248,245,236,.55);}
+  .enq-page .enq-card{width:100%;max-width:1200px;margin:0 auto;border-radius:1.4rem;border:1px solid var(--line-light);padding:clamp(1.4rem,4vw,3.2rem);background:rgba(248,245,236,.7);box-sizing:border-box;}
+  .enq-page .enq-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(1.5rem,4vw,3.5rem);}
+  .enq-page .enq-form{gap:1.15rem;}
+  .enq-form label:hover input:not(:disabled),.enq-form label:hover select:not(:disabled),.enq-form label:hover textarea:not(:disabled){border-color:var(--clay);}
+  .enq-form input,.enq-form select,.enq-form textarea{transition:border-color .2s,box-shadow .2s,background .2s;}
+  .enq-form input:focus-visible,.enq-form select:focus-visible,.enq-form textarea:focus-visible{outline:none;border-color:var(--clay);box-shadow:0 0 0 3px rgba(193,85,42,.25);}
+  .enq-form input.is-valid,.enq-form select.is-valid,.enq-form textarea.is-valid{border-color:#2e6b3a;}
+  .enq-form [aria-invalid="true"]{border-color:#b3261e;background:#fff6f5;}
+  .enq-form [aria-invalid="true"]:focus-visible{box-shadow:0 0 0 3px rgba(179,38,30,.25);}
+  .enq-form input:disabled,.enq-form select:disabled,.enq-form textarea:disabled{opacity:.6;cursor:not-allowed;}
+  .enq-err{display:block;min-height:0;font-size:.78rem;font-weight:500;color:#b3261e;letter-spacing:0;}
+  .enq-err:empty{display:none;}
+  .enq-form input[type=file]{padding:.55rem;cursor:pointer;}
+  .enq-form button[type=submit]{padding:.95rem 2.2rem;font-size:1rem;}
+  .enq-form button[type=submit]:focus-visible,.enq-again:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  .enq-form button[type=submit]:disabled{opacity:.65;cursor:progress;transform:none;}
   @media (max-width:760px){.enq-grid,.enq-row{grid-template-columns:1fr;}.enq-fab span{display:none;}.enq-fab{padding:.95rem;}}
 
   .enq-thanks{text-align:center;display:grid;gap:.8rem;justify-items:center;padding:1rem 0;}
