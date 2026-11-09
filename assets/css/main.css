@@ -1090,6 +1090,7 @@
   .enq-form input:disabled,.enq-form select:disabled,.enq-form textarea:disabled{opacity:.6;cursor:not-allowed;}
   .enq-err{display:block;min-height:0;font-size:.78rem;font-weight:500;color:#b3261e;letter-spacing:0;}
   .enq-err:empty{display:none;}
+  .enq-form label[hidden]{display:none;}
   .enq-form input[type=file]{padding:.55rem;cursor:pointer;}
   .enq-form button[type=submit]{padding:.95rem 2.2rem;font-size:1rem;}
   .enq-form button[type=submit]:focus-visible,.enq-again:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}

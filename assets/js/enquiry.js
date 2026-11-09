@@ -28,7 +28,9 @@
     '<label>Fabric<select name="fabric_source" required><option value="">Select</option>' +
     '<option>I will provide the fabric</option><option>Please source the fabric</option></select></label>' +
     '<label>Fabric material<input name="fabric_material" placeholder="e.g. cotton, silk, canvas"></label>' +
-    '<label>Number of pieces <small>(minimum 25 per product)</small><input name="quantity" type="number" inputmode="numeric" min="25" step="1" required placeholder="e.g. 50"></label>' +
+    '<label>I need a quote for<select name="quote_for" required><option value="">Select</option>' +
+    '<option>Sample cost</option><option>Bulk order price</option><option>Both sample and bulk</option></select></label>' +
+    '<label class="enq-qty">Number of pieces <small>(minimum 25 per product)</small><input name="quantity" type="number" inputmode="numeric" min="25" step="1" required placeholder="e.g. 50"></label>' +
     '<label>Timeline<select name="timeline" required><option value="">When do you need it?</option>' +
     '<option>Within 2 weeks</option><option>2 to 4 weeks</option><option>1 to 2 months</option><option>Flexible</option></select></label>' +
     '<fieldset class="enq-photos"><legend>Reference photos <small>(optional: upload or add a link)</small></legend>' +
@@ -80,7 +82,9 @@
       city: function (v) { return v.trim() ? '' : 'Please enter your city.'; },
       mobile: function (v) { return /^[6-9]\d{9}$/.test(normMobile(v)) ? '' : 'Enter a valid 10-digit mobile number (starts with 6, 7, 8 or 9).'; },
       email: function (v) { return !v.trim() || /^\S+@\S+\.\S+$/.test(v.trim()) ? '' : 'Please check your email address.'; },
+      quote_for: function (v) { return v ? '' : 'Please tell us what you need a quote for.'; },
       quantity: function (v) {
+        if (form.quote_for.value === 'Sample cost') return '';
         var t = String(v).trim();
         if (!t) return 'Please enter how many pieces you need.';
         if (!/^\d+$/.test(t)) return 'Enter a whole number, for example 50.';
@@ -118,6 +122,13 @@
       f.addEventListener('input', function () { if (f.getAttribute('aria-invalid')) check(n); });
       f.addEventListener('change', function () { check(n); });
     });
+    var qtyRow = form.querySelector('.enq-qty');
+    function syncQty() {
+      var sampleOnly = form.quote_for.value === 'Sample cost';
+      qtyRow.hidden = sampleOnly; form.quantity.required = !sampleOnly;
+      if (sampleOnly) { errEls.quantity.textContent = ''; form.quantity.removeAttribute('aria-invalid'); }
+    }
+    form.quote_for.addEventListener('change', syncQty); syncQty();
     form.mobile.addEventListener('input', function () {
       var p = form.mobile.value.replace(/[^\d+\s\-]/g, '');
       if (p !== form.mobile.value) form.mobile.value = p;
@@ -138,13 +149,14 @@
         photo_link: link,
         name: String(d.get('name')).trim(), city: String(d.get('city')).trim(), mobile: mobile, email: email,
         fabric_source: d.get('fabric_source'), fabric_material: String(d.get('fabric_material') || '').trim(),
-        quantity: parseInt(d.get('quantity'), 10), timeline: d.get('timeline'), page: location.href, time: new Date().toISOString(), files: []
+        quote_for: d.get('quote_for'),
+        quantity: d.get('quote_for') === 'Sample cost' ? '' : parseInt(d.get('quantity'), 10), timeline: d.get('timeline'), page: location.href, time: new Date().toISOString(), files: []
       };
 
       if (!ENDPOINT) {
         var text = 'Hello Project Hunar, I would like a bulk order enquiry.\nName: ' + data.name + '\nCity: ' + data.city +
           '\nMobile: ' + data.mobile + (email ? '\nEmail: ' + email : '') + '\nFabric: ' + data.fabric_source +
-          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + '\nPieces: ' + data.quantity + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
+          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + '\nQuote for: ' + data.quote_for + (data.quantity ? '\nPieces: ' + data.quantity : '') + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
         window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
         say('Thank you! Please send the WhatsApp message that just opened. You can share your photos there.', true);
         return;

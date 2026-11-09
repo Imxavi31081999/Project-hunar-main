@@ -18,7 +18,7 @@ var MAX_ATTACHMENTS = 5;
 var MAX_BYTES = 15 * 1024 * 1024;
 var STATUSES = ['New', 'Called', 'Quoted', 'Won', 'Lost'];
 // Pieces comes from the form. Sample cost and Price per piece are filled in by the team; Bulk total is a formula.
-var HEADERS = ['Time', 'Name', 'City', 'Mobile', 'Email', 'Fabric source', 'Fabric material', 'Pieces', 'Timeline', 'Status',
+var HEADERS = ['Time', 'Name', 'City', 'Mobile', 'Email', 'Fabric source', 'Fabric material', 'Quote for', 'Pieces', 'Timeline', 'Status',
                'Sample cost (INR)', 'Price per piece (INR)', 'Bulk total (INR)', 'Client mailed', 'Photos', 'Page'];
 
 // Brand colours for emails
@@ -58,9 +58,10 @@ function doPost(e) {
   if (d.email) {
     try { sendClientMail_(d); mailed = 'Yes'; } catch (err) { mailed = 'Failed: ' + err.message; }
   }
-  d.quantity = Math.max(25, parseInt(d.quantity, 10) || 25);
+  d.quote_for = d.quote_for || 'Bulk order price';
+  d.quantity = d.quote_for === 'Sample cost' ? '' : Math.max(25, parseInt(d.quantity, 10) || 25);
   sh.appendRow([new Date(d.time), d.name, d.city, "'" + d.mobile, d.email || '', d.fabric_source,
-                d.fabric_material, d.quantity, d.timeline, 'New', '', '', '', mailed, photos, d.page]);
+                d.fabric_material, d.quote_for, d.quantity, d.timeline, 'New', '', '', '', mailed, photos, d.page]);
   // Bulk total = Pieces x Price per piece (shows once the team enters the price)
   var qc = HEADERS.indexOf('Pieces') + 1, pc = HEADERS.indexOf('Price per piece (INR)') + 1, tc = HEADERS.indexOf('Bulk total (INR)') + 1;
   sh.getRange(sh.getLastRow(), tc).setFormulaR1C1('=IF(AND(RC[' + (qc - tc) + ']<>"",RC[' + (pc - tc) + ']<>""),RC[' + (qc - tc) + ']*RC[' + (pc - tc) + '],"")');
@@ -141,7 +142,7 @@ function sendClientMail_(d) {
     '<tr><td style="padding:20px 32px 6px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + C.paper + ';border-radius:10px"><tr><td style="padding:6px 20px 12px">' +
       '<div style="' + FONT + 'padding:12px 0 2px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:' + C.muted + ';font-weight:bold">Your enquiry</div>' +
       '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
-        row_('City', esc_(d.city)) + row_('Mobile', esc_(d.mobile)) + row_('Fabric', fabric) + row_('Pieces', esc_(d.quantity)) + row_('Timeline', esc_(d.timeline)) +
+        row_('City', esc_(d.city)) + row_('Mobile', esc_(d.mobile)) + row_('Fabric', fabric) + row_('Quote for', esc_(d.quote_for)) + row_('Pieces', esc_(d.quantity)) + row_('Timeline', esc_(d.timeline)) +
         row_('Reference photos', linksHtml_(d, d.files && d.files.length ? 'x' : '') ? 'Received' : '') +
       '</table></td></tr></table></td></tr>' +
     '<tr><td style="padding:22px 32px 4px"><div style="' + FONT + 'margin-bottom:14px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:' + C.muted + ';font-weight:bold">What happens next</div>' +
@@ -179,6 +180,7 @@ function sendTeamMail_(d, uploadUrl, mailed, sheetUrl) {
       row_('City', esc_(d.city)) +
       row_('Fabric', esc_(d.fabric_source)) +
       row_('Fabric material', esc_(d.fabric_material)) +
+      row_('Quote for', esc_(d.quote_for)) +
       row_('Pieces wanted', esc_(d.quantity)) +
       row_('Timeline', esc_(d.timeline)) +
       row_('Reference photos', links) +
@@ -193,7 +195,7 @@ function sendTeamMail_(d, uploadUrl, mailed, sheetUrl) {
     subject: 'New Hunar lead: ' + d.name + ' (' + d.city + ')',
     htmlBody: shell_('New lead from ' + d.name + ' in ' + d.city + '. Mobile ' + d.mobile, inner),
     body: 'New lead: ' + d.name + ', ' + d.city + '. Mobile: ' + d.mobile + '. Email: ' + (d.email || '-') +
-          '. Fabric: ' + d.fabric_source + ' ' + (d.fabric_material || '') + '. Pieces: ' + d.quantity + '. Timeline: ' + d.timeline + '. Sheet: ' + sheetUrl
+          '. Fabric: ' + d.fabric_source + ' ' + (d.fabric_material || '') + '. Quote for: ' + d.quote_for + '. Pieces: ' + d.quantity + '. Timeline: ' + d.timeline + '. Sheet: ' + sheetUrl
   });
 }
 
