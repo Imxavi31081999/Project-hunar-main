@@ -28,6 +28,7 @@
     '<label>Fabric<select name="fabric_source" required><option value="">Select</option>' +
     '<option>I will provide the fabric</option><option>Please source the fabric</option></select></label>' +
     '<label>Fabric material<input name="fabric_material" placeholder="e.g. cotton, silk, canvas"></label>' +
+    '<label>Number of pieces <small>(minimum 25 per product)</small><input name="quantity" type="number" inputmode="numeric" min="25" step="1" required placeholder="e.g. 50"></label>' +
     '<label>Timeline<select name="timeline" required><option value="">When do you need it?</option>' +
     '<option>Within 2 weeks</option><option>2 to 4 weeks</option><option>1 to 2 months</option><option>Flexible</option></select></label>' +
     '<fieldset class="enq-photos"><legend>Reference photos <small>(optional: upload or add a link)</small></legend>' +
@@ -79,6 +80,13 @@
       city: function (v) { return v.trim() ? '' : 'Please enter your city.'; },
       mobile: function (v) { return /^[6-9]\d{9}$/.test(normMobile(v)) ? '' : 'Enter a valid 10-digit mobile number (starts with 6, 7, 8 or 9).'; },
       email: function (v) { return !v.trim() || /^\S+@\S+\.\S+$/.test(v.trim()) ? '' : 'Please check your email address.'; },
+      quantity: function (v) {
+        var t = String(v).trim();
+        if (!t) return 'Please enter how many pieces you need.';
+        if (!/^\d+$/.test(t)) return 'Enter a whole number, for example 50.';
+        if (+t < 25) return 'Our minimum order is 25 pieces.';
+        return +t > 100000 ? 'Please enter a smaller number or call us.' : '';
+      },
       fabric_source: function (v) { return v ? '' : 'Please choose an option.'; },
       timeline: function (v) { return v ? '' : 'Please choose a timeline.'; },
       photo_link: function (v) {
@@ -130,13 +138,13 @@
         photo_link: link,
         name: String(d.get('name')).trim(), city: String(d.get('city')).trim(), mobile: mobile, email: email,
         fabric_source: d.get('fabric_source'), fabric_material: String(d.get('fabric_material') || '').trim(),
-        timeline: d.get('timeline'), page: location.href, time: new Date().toISOString(), files: []
+        quantity: parseInt(d.get('quantity'), 10), timeline: d.get('timeline'), page: location.href, time: new Date().toISOString(), files: []
       };
 
       if (!ENDPOINT) {
         var text = 'Hello Project Hunar, I would like a bulk order enquiry.\nName: ' + data.name + '\nCity: ' + data.city +
           '\nMobile: ' + data.mobile + (email ? '\nEmail: ' + email : '') + '\nFabric: ' + data.fabric_source +
-          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
+          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + '\nPieces: ' + data.quantity + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
         window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
         say('Thank you! Please send the WhatsApp message that just opened. You can share your photos there.', true);
         return;
