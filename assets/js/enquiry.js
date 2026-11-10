@@ -28,6 +28,7 @@
     '<label>Fabric<select name="fabric_source" required><option value="">Select</option>' +
     '<option>I will provide the fabric</option><option>Please source the fabric</option></select></label>' +
     '<label>Fabric material<input name="fabric_material" placeholder="e.g. cotton, silk, canvas"></label>' +
+    '<label>Measurements <small>(optional)</small><input name="measurements" placeholder="Write the size you need"></label>' +
     '<label>I need a quote for<select name="quote_for" required><option value="">Select</option>' +
     '<option>Sample cost</option><option>Bulk order price</option><option>Both sample and bulk</option></select></label>' +
     '<label class="enq-qty">Number of pieces <small>(minimum 25 per product)</small><input name="quantity" type="number" inputmode="numeric" min="25" step="1" required placeholder="e.g. 50"></label>' +
@@ -149,14 +150,14 @@
         photo_link: link,
         name: String(d.get('name')).trim(), city: String(d.get('city')).trim(), mobile: mobile, email: email,
         fabric_source: d.get('fabric_source'), fabric_material: String(d.get('fabric_material') || '').trim(),
-        quote_for: d.get('quote_for'),
+        quote_for: d.get('quote_for'), measurements: String(d.get('measurements') || '').trim(),
         quantity: d.get('quote_for') === 'Sample cost' ? '' : parseInt(d.get('quantity'), 10), timeline: d.get('timeline'), page: location.href, time: new Date().toISOString(), files: []
       };
 
       if (!ENDPOINT) {
         var text = 'Hello Project Hunar, I would like a bulk order enquiry.\nName: ' + data.name + '\nCity: ' + data.city +
           '\nMobile: ' + data.mobile + (email ? '\nEmail: ' + email : '') + '\nFabric: ' + data.fabric_source +
-          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + '\nQuote for: ' + data.quote_for + (data.quantity ? '\nPieces: ' + data.quantity : '') + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
+          (data.fabric_material ? ' (' + data.fabric_material + ')' : '') + (data.measurements ? '\nMeasurements: ' + data.measurements : '') + '\nQuote for: ' + data.quote_for + (data.quantity ? '\nPieces: ' + data.quantity : '') + '\nTimeline: ' + data.timeline + (link ? '\nPhotos: ' + link : '');
         window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
         say('Thank you! Please send the WhatsApp message that just opened. You can share your photos there.', true);
         return;

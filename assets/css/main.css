@@ -1048,7 +1048,7 @@
   @media (max-width:640px){.latest-grid{gap:.8rem;}.latest-grid .cat-card{flex-basis:62vw;}}
 
   /* ===== Enquiry (popup, button, page) ===== */
-  .enq-fab{position:fixed;z-index:900;right:max(1rem,env(safe-area-inset-right,0px));bottom:max(1rem,env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:.5rem;border:0;cursor:pointer;font:600 .92rem 'Outfit',sans-serif;color:#fff;background:var(--clay);padding:.85rem 1.25rem;border-radius:999px;box-shadow:0 10px 30px -8px rgba(193,85,42,.7);transition:transform .25s var(--ease),background .25s;}
+  .enq-fab{position:fixed;z-index:900;right:max(1rem,env(safe-area-inset-right,0px));bottom:max(4rem,env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:.5rem;border:0;cursor:pointer;font:600 .92rem 'Outfit',sans-serif;color:#fff;background:var(--clay);padding:.85rem 1.25rem;border-radius:999px;box-shadow:0 10px 30px -8px rgba(193,85,42,.7);transition:transform .25s var(--ease),background .25s;}
   .enq-fab:hover{transform:translateY(-3px);background:#a5471f;}
   .enq-fab:focus-visible,.enq-close:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
   .enq-modal{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem;}
@@ -1130,3 +1130,29 @@
   .faq-cta .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
   @media (max-width:480px){.faq-q{padding:1rem;font-size:.97rem;}.faq-a{padding:0 1rem 1.1rem;}}
   @media (prefers-reduced-motion:reduce){.faq-panel,.faq-icon,.faq-item{transition:none;}}
+
+  /* Footer credit row: Rixes Studio */
+  .credit-row{background:#000;color:#f4efe4;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;padding:20px;font-size:.72rem;letter-spacing:.04em;}
+  .credit-row span{opacity:.6;}
+  .credit-row img{height:16px;width:auto;display:block;}
+  .credit-row a{display:inline-flex;opacity:.9;transition:opacity .2s;}
+  .credit-row a:hover{opacity:1;}
+  @media (max-width:760px){.credit-row{justify-content:center;}}
+
+  /* Hamburger menu from 1180px down (nine links + brand text no longer fit in one row).
+     Dropdown is absolute inside .nav (which has backdrop-filter, so fixed would be clipped to the bar). */
+  @media (max-width:1180px){
+    .nav-pill{
+      position:absolute;top:calc(100% + .5rem);right:clamp(1rem,3vw,1.5rem);left:auto;bottom:auto;
+      transform:translateY(-8px);opacity:0;visibility:hidden;pointer-events:none;
+      flex-direction:column;align-items:stretch;gap:.3rem;
+      width:min(340px,calc(100vw - 2rem));max-height:calc(100vh - 6rem);overflow-y:auto;
+      padding:.8rem;border-radius:1.4rem;
+      background:rgba(11,10,8,.96);border-color:rgba(244,239,228,.14);
+      box-shadow:0 24px 60px rgba(0,0,0,.5);
+      transition:opacity .25s var(--ease), transform .25s var(--ease), visibility 0s linear .25s;
+    }
+    .nav-pill.open{transform:none;opacity:1;visibility:visible;pointer-events:auto;transition:opacity .25s var(--ease), transform .25s var(--ease), visibility 0s;}
+    .nav-pill a{padding:.8rem 1.1rem;font-size:.82rem;letter-spacing:.14em;border-radius:100px;}
+    .nav-toggle{display:inline-flex;}
+  }
